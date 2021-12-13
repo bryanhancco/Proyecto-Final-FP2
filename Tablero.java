@@ -11,6 +11,7 @@ public class Tablero {
                 fila = (int)(Math.random()*10);
                 columna = (int)(Math.random()*10);
             } while(pos[fila][columna] != 0);
+            pos[fila][columna] = 1;
             miTablero[fila][columna] = new Mina(fila, columna);
         }
     }
