@@ -11,4 +11,8 @@ public class Ejercito {
 			soldados.put(ub, new Soldado(team, f + 1, ub));
 		}
 	}
+	
+	public HashMap<String, Soldado> getLista(){
+		return soldados;
+	}
 }
