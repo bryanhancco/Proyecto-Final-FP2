@@ -9,6 +9,10 @@ public class Soldado {
 		this.ubicacion= ubicacion;
 	}
 	
+	public void setUbicacion(String ub) {
+		ubicacion= ub;
+	}
+	
 	public void setEscudo() {
 		tieneEscudo= true;
 	}
@@ -39,5 +43,15 @@ public class Soldado {
 			return getUbicacion();
 		else
 			return s.getUbicacion();
+	}
+	
+	public void mover (HashMap<String, Soldado> map, String ub) {
+		if(map.containsKey(ub) && map.get(ub).getTeam() == team) {
+			System.out.print("Movimiento no permitido");
+		}
+		else if(map.containsKey(ub))
+			lucha(map.get(ub));
+		else
+			setUbicacion(ub);
 	}
 }
