@@ -57,4 +57,17 @@ public class Tablero {
             cuadrante.setNumero(cantidadMinas);
         }
     }
+    public void generarEscudos(){
+        int[][] pos = new int[10][10];
+        int fila;
+        int columna;
+        for (int i=0; i<Libre.cantEscudos; i++){
+            do {
+                fila = (int)(Math.random()*10);
+                columna = (int)(Math.random()*10);
+            } while(pos[fila][columna] != 0 && miTablero[fila][columna] instanceof Mina);
+            Libre lib = (Libre) miTablero[fila][columna];
+            lib.setEscudo();
+        }
+    }
 }
