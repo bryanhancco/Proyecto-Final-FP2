@@ -16,7 +16,7 @@ public class Tablero {
             do {
                 fila = (int)(Math.random()*10);
                 columna = (int)(Math.random()*12);
-            } while(pos[fila][columna] != 0);
+            } while(pos[fila][columna] != 0  || columna == 0 || columna == 11);
             pos[fila][columna] = 1;
             miTablero[fila][columna] = new Mina(fila, columna);
         }
@@ -65,7 +65,7 @@ public class Tablero {
             do {
                 fila = (int)(Math.random()*10);
                 columna = (int)(Math.random()*12);
-            } while(pos[fila][columna] != 0 && miTablero[fila][columna] instanceof Mina);
+            } while(pos[fila][columna] != 0 && miTablero[fila][columna] instanceof Mina  || columna == 0 || columna == 11);
             Libre lib = (Libre) miTablero[fila][columna];
             lib.setEscudo();
         }
