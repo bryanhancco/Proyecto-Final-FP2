@@ -4,18 +4,18 @@ public class Tablero {
     private Cuadrante[][] miTablero;
     
     public Tablero() {
-        miTablero = new Cuadrante[10][10];
+        miTablero = new Cuadrante[10][12];
         generarMinas();
         generarLibres();
     }
     public void generarMinas() {
-        int[][] pos = new int[10][10];
+        int[][] pos = new int[10][12];
         int fila;
         int columna;
         for (int i=0; i<Mina.cantMinas; i++){
             do {
                 fila = (int)(Math.random()*10);
-                columna = (int)(Math.random()*10);
+                columna = (int)(Math.random()*12);
             } while(pos[fila][columna] != 0);
             pos[fila][columna] = 1;
             miTablero[fila][columna] = new Mina(fila, columna);
@@ -23,7 +23,7 @@ public class Tablero {
     }
     public void generarLibres() {
         for (int i=0; i<10; i++) {
-            for (int j=0; j<10; j++) {
+            for (int j=0; j<12; j++) {
                 if (miTablero[i][j] == null){
                     //se genera un cuadrante Libre, e inmediatamente se le asigna
                     //un número (si tiene minas alrededor)
@@ -42,7 +42,7 @@ public class Tablero {
         for (int i=fil-1; i<=fil+1; i++){
             if (i < 0 || i > 9) continue;
             for (int j=col-1; j<=col+1; j++){
-                if (j < 0 || j > 9) continue;
+                if (j < 0 || j > 11) continue;
                 //no se tomara en cuenta al propio cuadrante
                 //tampoco se tomara en cuenta a las posiciones aun no definidas
                 if ((i == fil && j == col) || miTablero[i][j] == null) continue;
@@ -58,13 +58,13 @@ public class Tablero {
         }
     }
     public void generarEscudos(){
-        int[][] pos = new int[10][10];
+        int[][] pos = new int[10][12];
         int fila;
         int columna;
         for (int i=0; i<Libre.cantEscudos; i++){
             do {
                 fila = (int)(Math.random()*10);
-                columna = (int)(Math.random()*10);
+                columna = (int)(Math.random()*12);
             } while(pos[fila][columna] != 0 && miTablero[fila][columna] instanceof Mina);
             Libre lib = (Libre) miTablero[fila][columna];
             lib.setEscudo();
