@@ -70,4 +70,12 @@ public class Tablero {
             lib.setEscudo();
         }
     }
+    
+    public static String toKey(String f, int c) {
+    	return f + c;
+    }
+    
+    public static String toKey(int f, int c) {
+    	return toKey("ABCDEFHIJKL".substring(f, f + 1), c);
+    }
 }
