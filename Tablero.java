@@ -71,11 +71,11 @@ public class Tablero {
         }
     }
     
-    public static String toKey(String f, int c) {
-    	return f + c;
+    public static String toKey(String c, int f) {
+    	return c + f;
     }
     
     public static String toKey(int f, int c) {
-    	return toKey("ABCDEFHIJKL".substring(f, f + 1), c);
+    	return toKey("ABCDEFHIJKL".substring(c, c + 1), f);
     }
 }
