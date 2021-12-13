@@ -4,7 +4,7 @@ public class Soldado {
 	private int team;
 	
 	public Soldado(int team, int num, String ubicacion) {
-		nombre= "Soldado" + team;
+		nombre= "Soldado" + team + "-" + num;
 		this.team= team;
 		this.ubicacion= ubicacion;
 	}
