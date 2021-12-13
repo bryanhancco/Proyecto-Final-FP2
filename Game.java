@@ -13,6 +13,22 @@ public class Game {
     public void iniciarJuego() {
         
     }
+    public void imprimirTablero(){
+        System.out.println("\n \tA\tB\tC\tD\tE\tF\tG\tH\tI\tJ\tK\tL");
+        for (int i=0; i<miTablero.getCuadrantes().length; i++){
+            System.out.print("\n"+(i+1)+"\t");
+            for (int j=0; j<miTablero.getCuadrantes()[0].length; j++){
+                if (miTablero.getCuadrantes()[i][j].getEstadoOculto())
+                    System.out.print("-\t");
+                else {
+                    if (miTablero.getCuadrantes()[i][j] instanceof Mina)
+                        System.out.print("*\t");
+                    else 
+                        System.out.println("_\t");    
+                }
+            }
+        }  
+    }
     public ArrayList<String> movimientosValidos(Soldado sold) {
         ArrayList<String> movValidas = new ArrayList<String>();
         int fil = sold.getUbicacion().substring(0, 1).compareTo("A");
