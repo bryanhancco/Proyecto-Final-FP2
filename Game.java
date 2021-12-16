@@ -29,10 +29,10 @@ public class Game {
             }
         }  
     }
-    public ArrayList<String> movimientosValidos(Soldado sold) {
+    public static ArrayList<String> movimientosValidos(String posSoldado) {
         ArrayList<String> movValidas = new ArrayList<String>();
-        int fil = sold.getUbicacion().substring(0, 1).compareTo("A");
-        int col = Integer.parseInt(sold.getUbicacion().substring(1));
+        int fil = Integer.parseInt(posSoldado.substring(0, 1));
+        int col = posSoldado.substring(1).compareTo("A");
         for (int i=fil-1; i<=fil+1; i++){
             if (i < 0 || i > 9) continue;
             for (int j=col-1; j<=col+1; j++){
