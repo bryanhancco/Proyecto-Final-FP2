@@ -1,4 +1,3 @@
-
 import java.util.*;
 public class Game {
     private Tablero miTablero;
@@ -9,9 +8,17 @@ public class Game {
         miTablero = new Tablero();
         ejer1 = new Ejercito(0, 1);
         ejer2 = new Ejercito(11, 2);
+        jugarPorTurnos(ejer1, ejer2, miTablero);
     }
     public void iniciarJuego() {
-        
+        Scanner sc= new Scanner(System.in);
+        String conf;
+        do {
+        	imprimirTablero();
+        	System.out.print("¿Desea iniciar otro juego?(S/N): ");
+        	conf= sc.next();
+        }
+        while(conf.equals("S"));
     }
     public void imprimirTablero(){
         System.out.println("\n \tA\tB\tC\tD\tE\tF\tG\tH\tI\tJ\tK\tL");
@@ -55,7 +62,7 @@ public class Game {
             }
         }
         
-        System.out.println("A que posiciÃ³n quiere moverlo");
+        System.out.println("A que posición quiere moverlo");
         System.out.println("Fila");
         fila = scan.nextInt();
         System.out.println("Columna");
@@ -63,7 +70,7 @@ public class Game {
         pMovimiento = fila+"ABCDEFGHIJKL".substring(columna, columna+1);
         while(!movimientosValidos(pInicial).contains(pMovimiento)){
             System.out.println("No es posible moverlo a esa ubicaciÃ³n");
-            System.out.println("A que posiciÃ³n quiere moverlo");
+            System.out.println("A que posición quiere moverlo");
             System.out.println("Fila");
             fila = scan.nextInt();
             System.out.println("Columna");
