@@ -1,3 +1,4 @@
+
 public class Cuadrante {
     private int fila;
     private int columna;
@@ -7,6 +8,12 @@ public class Cuadrante {
     public Cuadrante(int f, int c) {
         fila = f;
         columna = c;
+    }
+    public void setFila(int fila) {
+        this.fila = fila;
+    }
+    public void setColumna(int columna) {
+        this.columna = columna;
     }
     public int getFila() {
         return fila;
@@ -18,3 +25,4 @@ public class Cuadrante {
         return estaOculto;
     }
 }
+
