@@ -1,15 +1,15 @@
-import java.util.*;
+
+import java.util.Scanner;
 public class RunAndDestroy {
-	public static void main(String[] args) {
-        Scanner sc= new Scanner(System.in);
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
         String conf;
-        Game juego = new Game();
         do {
-        	juego.imprimirTablero();
-        	System.out.print("---> ¿Desea iniciar otro juego?(S/N): ");
-        	conf= sc.next();
+            Game juego = new Game();
+            juego.iniciarJuego();
+            System.out.print("---> Â¿Desea iniciar otro juego?(S/N): ");
+            conf= sc.next();
         }
         while(conf.equals("S"));
-		
-	}
+    }
 }
