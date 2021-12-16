@@ -43,4 +43,31 @@ public class Game {
         }
         return movValidas;
     }
+    public static void jugarPorTurnos(Ejercito ejerJug, Ejercito ejerEnem, Tablero miT){
+        Scanner scan = new Scanner(System.in);
+        int cont = 0;
+        String pInicial = "", pMovimiento, nomReino;
+        int fila, columna;
+        for (String key : ejerJug.getSoldados().keySet()){
+            if (cont == 0){
+                pInicial = key;
+                cont++;
+            }
+        }
+        
+        System.out.println("A que posición quiere moverlo");
+        System.out.println("Fila");
+        fila = scan.nextInt();
+        System.out.println("Columna");
+        columna = scan.nextInt();
+        pMovimiento = fila+"ABCDEFGHIJKL".substring(columna, columna+1);
+        while(!movimientosValidos(pInicial).contains(pMovimiento)){
+            System.out.println("No es posible moverlo a esa ubicación");
+            System.out.println("A que posición quiere moverlo");
+            System.out.println("Fila");
+            fila = scan.nextInt();
+            System.out.println("Columna");
+            columna = scan.nextInt();
+        }
+    }
 }
