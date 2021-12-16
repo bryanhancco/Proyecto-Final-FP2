@@ -7,12 +7,14 @@ public class Ejercito {
 		this.team= team;
 		String ub;
 		for(int f= 0; f< 10; f++) {
-			ub= Tablero.toKey(f, c);
+			ub= Tablero.toKey(f+1, c);
 			soldados.put(ub, new Soldado(team, f + 1, ub));
 		}
 	}
-	
-	public HashMap<String, Soldado> getSoldados(){
-		return soldados;
-	}
+        public int getTeam(){
+            return team;
+        }
+        public HashMap<String, Soldado> getSoldados() {
+            return soldados;
+        }
 }
