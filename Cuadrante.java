@@ -1,5 +1,3 @@
-
-
 public class Cuadrante {
     private int fila;
     private int columna;
