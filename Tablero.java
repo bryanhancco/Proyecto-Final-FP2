@@ -10,6 +10,15 @@ public class Tablero {
     public Cuadrante[][] getCuadrantes(){
         return miTablero;
     }
+    
+    public boolean esMina(String ub) {
+    	String letras= "ABCDEFGHIJKL";
+		int large= ub.length();
+		String columna = ub.substring(large - 1, large);
+		int col= letras.indexOf(columna) + 1;
+		int fila= Integer.parseInt(ub.substring(0, ub.length() - 1));
+		return miTablero[fila][col].tieneMina;
+    }
     public void generarMinas() {
         int[][] pos = new int[10][12];
         int fila;
@@ -75,7 +84,12 @@ public class Tablero {
     public static String toKey(int f, String c) {
     	return f + c;
     }
-    public static String toKey(int f, int c) {
-    	return toKey(f, "ABCDEFGHIJKL".substring(c-1, c));
-    }
+    
+	public static String toKey(int f, int c) {
+		String letras= "ABCDEFGHIJKL", k;
+		if (c< 1 || c> 12 || f< 1 || f> 10)
+			return "-"; //Si esta fuera del tablero
+		k= f + letras.substring(c-1,c);
+		return k;
+	}
 }
