@@ -7,6 +7,9 @@ public class Tablero {
         generarMinas();
         generarLibres();
     }
+    public Cuadrante[][] getCuadrantes(){
+        return miTablero;
+    }
     public void generarMinas() {
         int[][] pos = new int[10][12];
         int fila;
