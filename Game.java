@@ -8,17 +8,9 @@ public class Game {
         miTablero = new Tablero();
         ejer1 = new Ejercito(0, 1);
         ejer2 = new Ejercito(11, 2);
-        jugarPorTurnos(ejer1, ejer2, miTablero);
     }
     public void iniciarJuego() {
-        Scanner sc= new Scanner(System.in);
-        String conf;
-        do {
-        	imprimirTablero();
-        	System.out.print("¿Desea iniciar otro juego?(S/N): ");
-        	conf= sc.next();
-        }
-        while(conf.equals("S"));
+    	
     }
     public void imprimirTablero(String pos){
         System.out.println("\n \tA\tB\tC\tD\tE\tF\tG\tH\tI\tJ\tK\tL");
