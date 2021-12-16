@@ -15,17 +15,19 @@ public class Game {
         String conf;
         do {
         	imprimirTablero();
-        	System.out.print("¿Desea iniciar otro juego?(S/N): ");
+        	System.out.print("Â¿Desea iniciar otro juego?(S/N): ");
         	conf= sc.next();
         }
         while(conf.equals("S"));
     }
-    public void imprimirTablero(){
+    public void imprimirTablero(String pos){
         System.out.println("\n \tA\tB\tC\tD\tE\tF\tG\tH\tI\tJ\tK\tL");
         for (int i=0; i<miTablero.getCuadrantes().length; i++){
             System.out.print("\n"+(i+1)+"\t");
             for (int j=0; j<miTablero.getCuadrantes()[0].length; j++){
-                if (miTablero.getCuadrantes()[i][j].getEstadoOculto())
+                if (miTablero.getCuadrantes()[i][j].equals(pos)) 
+                    System.out.print("S\t");     
+                else if (miTablero.getCuadrantes()[i][j].getEstadoOculto())
                     System.out.print("-\t");
                 else {
                     if (miTablero.getCuadrantes()[i][j] instanceof Mina)
@@ -61,8 +63,7 @@ public class Game {
                 cont++;
             }
         }
-        
-        System.out.println("A que posición quiere moverlo");
+        System.out.println("A que posiciÃ³n quiere moverlo");
         System.out.println("Fila");
         fila = scan.nextInt();
         System.out.println("Columna");
@@ -70,11 +71,28 @@ public class Game {
         pMovimiento = fila+"ABCDEFGHIJKL".substring(columna, columna+1);
         while(!movimientosValidos(pInicial).contains(pMovimiento)){
             System.out.println("No es posible moverlo a esa ubicaciÃ³n");
-            System.out.println("A que posición quiere moverlo");
+            System.out.println("A que posiciÃ³n quiere moverlo");
             System.out.println("Fila");
             fila = scan.nextInt();
             System.out.println("Columna");
             columna = scan.nextInt();
+        }
+        mover(pInicial, miT, pMovimiento, ejerJug.getSoldados());
+    }
+    public static void mover(String posInicial, Tablero miTablero, String posMovimiento, HashMap<String, Soldado> misSoldados) {
+        int filaI = Integer.parseInt(posInicial.substring(0, 1));
+        int colI = posInicial.substring(1).compareTo("A");
+        int filaM = Integer.parseInt(posMovimiento.substring(0, 1));
+        int colM = posMovimiento.substring(1).compareTo("A");
+        
+        if (miTablero.getCuadrantes()[filaM][colM] instanceof Mina) {
+            System.out.println("El soldado ha muerto, ha pisado una mina");
+            misSoldados.remove(posInicial);
+        }
+        else if (miTablero.getCuadrantes()[filaM][colM] instanceof Libre) {
+            System.out.println("El soldado se ha movido");
+            miTablero.getCuadrantes()[filaI][colI].setFila(filaM);
+            miTablero.getCuadrantes()[filaI][colI].setColumna(colM);
         }
     }
 }
