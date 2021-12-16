@@ -12,7 +12,7 @@ public class Ejercito {
 		}
 	}
 	
-	public HashMap<String, Soldado> getLista(){
+	public HashMap<String, Soldado> getSoldados(){
 		return soldados;
 	}
 }
