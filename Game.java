@@ -37,15 +37,17 @@ public class Game {
         }  
     }
     public static ArrayList<String> movimientosValidos(String posSoldado) {
+    	System.out.println("***" + posSoldado);
         ArrayList<String> movValidas = new ArrayList<String>();
         int fil = Integer.parseInt(posSoldado.substring(0, 1));
         int col = posSoldado.substring(1).compareTo("A");
+        System.out.println("2.- **" + fil + "  " + col);
         for (int i=fil-1; i<=fil+1; i++){
-            if (i <= 0 || i > 9) continue;
+            if (i < 0 || i > 9) continue;
             for (int j=col-1; j<=col+1; j++){
-                if (j <= 0 || j > 11) continue;
+                if (j < 0 || j > 11) continue;
                 if (i == fil && j == col) continue; 
-                movValidas.add((i+1)+"ABCDEFGHIJKL".substring(j, j+1));
+                movValidas.add(Tablero.toKey(i + 1, j + 1));
             }
         }
         return movValidas;
@@ -56,6 +58,7 @@ public class Game {
         String pInicial = "", pMovimiento, nomReino;
         int fila; 
         String columna;
+        
         for (String key : ejerJug.getSoldados().keySet()){
             if (cont == 0){
                 System.out.println(key);
@@ -63,10 +66,11 @@ public class Game {
                 cont++;
             }
         }
+        
         imprimirTablero(pInicial);
         System.out.println("\nA que posición quiere moverlo");
         System.out.println("Fila");
-        fila = scan.nextInt();
+        fila = scan.nextInt() - 1;
         System.out.println("Columna");
         columna = scan.next();
         pMovimiento = fila+columna;
