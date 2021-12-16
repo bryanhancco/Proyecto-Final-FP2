@@ -1,4 +1,3 @@
-
 import java.util.*;
 public class Tablero {
     private Cuadrante[][] miTablero;
@@ -78,4 +77,7 @@ public class Tablero {
     public static String toKey(int f, int c) {
     	return toKey("ABCDEFHIJKL".substring(c, c + 1), f);
     }
+	public Object getCuadrantes() {
+		Falta definir;
+	}    
 }

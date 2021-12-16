@@ -1,3 +1,4 @@
+import java.util.*;
 public class Soldado {
 	private boolean tieneEscudo;
 	private String nombre, ubicacion;
