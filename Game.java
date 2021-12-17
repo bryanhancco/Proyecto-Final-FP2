@@ -41,6 +41,39 @@ public class Game {
         }  
     }
     
+    /// TABLERO CON FORMATO    
+	public void mostrarTablero() {
+		String pos1= getLstTeam(1).get(0).getUbicacion();
+		String pos2= getLstTeam(2).get(0).getUbicacion();
+		System.out.print("////////////////////////////////////////////////////////////"
+				+ "////////// \n\t\t\tMOSTRANDO EL TABLERO\n"
+				+ "\n\t    A   B   C   D   E   F   G   H   I   J   K   L\n"
+				+ "\t   -------------------------------------------------\n");
+		String k;
+		for(int f= 1; f<= 10; f++) {
+			if (f< 10)
+				System.out.print("\t");
+			else
+				System.out.print("       ");
+			System.out.print(f + " |");
+			for(int c=1; c<= 12; c++) {
+				k= Tablero.toKey(f, c);
+				if (miTablero.esMina(k))
+					System.out.print(" @ ");
+				else if (k.equals(pos1))
+					System.out.print(" & ");
+				else if (k.equals(pos2))
+					System.out.print(" � ");				
+				else
+					System.out.print("   ");
+				System.out.print("|");
+			}
+			System.out.print("\n\t  -------------------------------------------------\n");
+		}
+		System.out.println("\n---> Reino N�1: " + datos[1] + " (&)"
+				+ "\n---> Reino N�2: " + datos[2] + " (�)");
+	}
+    
     //devuelve la lista ordenda según el equipo
     public ArrayList<Soldado> getLstTeam(int team){
         if (team == 1)
@@ -69,21 +102,23 @@ public class Game {
     //permite mover al soldado de al soldado 
     public void mover(int team) {
 	Scanner sc= new Scanner(System.in);
-	imprimirTablero(getLstTeam(1).get(0).getUbicacion(), getLstTeam(2).get(0).getUbicacion());
+	//imprimirTablero(getLstTeam(1).get(0).getUbicacion(), getLstTeam(2).get(0).getUbicacion());
+	mostrarTablero();
 	String ub, k;
-	System.out.print("\n- Soldados restantes en el Ejército N°1: " + getLstTeam(1).size()
+	System.out.println("\n- Soldados restantes en el Ejército N°1: " + getLstTeam(1).size()
 			+ "\n- Soldados restantes en el Ejército N°2: " + getLstTeam(2).size() 
 			+ "\nTURNO DEL JUGADOR N°" + team 
-			+ "\n***" + getLstTeam(team).get(0).getNombre() + "\n\n");
+			+ "\n***" + getLstTeam(team).get(0).getNombre() + "  ");
 	ub = getLstTeam(team).get(0).getUbicacion(); 
 	int aux = 1;
         if (team == 2)
             aux = -1;
         //muestra las posiciones válidas para el movimiento del soldado
         for(int j = -1; j <= 1; j++) {
+        	System.out.print("\t\t\t");
             k = Tablero.toKey(getLista().get(ub).getNfila() + j, getLista().get(ub).getNcolumna() + aux);				
                 if(k.equals("-"))
-                    System.out.print(" X ");
+                    System.out.print(" X");
                 else
                     System.out.print(k);
             System.out.print("\n");	
