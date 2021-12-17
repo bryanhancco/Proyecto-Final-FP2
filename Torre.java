@@ -1,4 +1,3 @@
-
 public class Torre {
     private int vidaTorre;
     private boolean torreEnPie;

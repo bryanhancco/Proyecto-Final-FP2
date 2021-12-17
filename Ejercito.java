@@ -37,4 +37,14 @@ public class Ejercito {
                     }
 	return lst;		
     }
+    
+    public void retirarSoldado(String k) {
+    	System.out.println("Retirando " + k + " : " + soldados.get(k).getNombre());
+    	soldados.remove(k);
+    }
+    
+    public void moverSoldado(String k1, String k2) {
+    	soldados.get(k1).setUbicacion(k2);
+    	soldados.put(k2, soldados.remove(k1));
+    }
 }

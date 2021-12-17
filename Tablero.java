@@ -11,13 +11,20 @@ public class Tablero {
         return miTablero;
     }
     
+    public void quitarMina(String ub) {
+    	int large = ub.length();
+        String columna = ub.substring(large - 1);
+        int col = columna.compareTo("A");
+        int fila = Integer.parseInt(ub.substring(0, ub.length() - 1)) -1;
+        miTablero[fila][col]= new Cuadrante(fila, col);
+    }
+    
     public boolean esMina(String ub) {
         int large = ub.length();
         String columna = ub.substring(large - 1);
         int col = columna.compareTo("A");
         int fila = Integer.parseInt(ub.substring(0, ub.length() - 1)) -1;
-        if (miTablero[fila][col] instanceof Mina) return true;
-	return false;
+        return (miTablero[fila][col] instanceof Mina);
     }
     public void generarMinas() {
         int[][] pos = new int[10][12];
