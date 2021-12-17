@@ -19,6 +19,13 @@ public class Tablero {
         miTablero[fila][col]= new Cuadrante(fila, col);
     }
     
+    public Cuadrante getCuadrante(String ub){
+    	int large = ub.length();
+        String columna = ub.substring(large - 1);
+        int col = columna.compareTo("A");
+        int fila = Integer.parseInt(ub.substring(0, ub.length() - 1)) -1;
+    	return miTablero[fila][col];
+    }
     public boolean esMina(String ub) {
         int large = ub.length();
         String columna = ub.substring(large - 1);
@@ -26,6 +33,7 @@ public class Tablero {
         int fila = Integer.parseInt(ub.substring(0, ub.length() - 1)) -1;
         return (miTablero[fila][col] instanceof Mina);
     }
+    
     public void generarMinas() {
         int[][] pos = new int[10][12];
         int fila;

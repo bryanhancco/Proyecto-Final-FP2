@@ -28,5 +28,9 @@ public class Cuadrante {
     public boolean getEstadoOculto(){
         return estaOculto;
     }
+    
+    public int getNumero() {
+    	return 0;
+    }
 }
 

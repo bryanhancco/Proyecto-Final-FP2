@@ -13,11 +13,19 @@ public class Game {
     }
     
     //Inicia todo el juego
-    public void iniciarJuego() {  
-        do {        	
+    public void iniciarJuego() {
+        while(hayJuego()) {        	
             mover(1);
+            if(hayJuego())
             mover(2);
-        } while (!ejer1.getSoldados().isEmpty() && !ejer2.getSoldados().isEmpty());
+        }
+        System.out.println("\n---> °JUEGO TERMINADO!");
+    }
+    
+    // Verifica si el juego se termino
+    public boolean hayJuego() {
+    	return (!ejer1.getSoldados().isEmpty() && !ejer2.getSoldados().isEmpty() 
+    			&& ejer1.getTorre().enPie() && ejer2.getTorre().enPie());
     }
     
     //Imprime el tablero de juego
@@ -59,7 +67,7 @@ public class Game {
 			for(int c=1; c<= 12; c++) {
 				k= Tablero.toKey(f, c);
 				if (miTablero.esMina(k))
-					System.out.print(" @ ");
+					System.out.print(" * ");
 				else if (k.equals(pos1))
 					System.out.print(" & ");
 				else if (k.equals(pos2))
@@ -101,50 +109,99 @@ public class Game {
     
     //permite mover al soldado de al soldado 
     public void mover(int team) {
-	Scanner sc= new Scanner(System.in);
-	//imprimirTablero(getLstTeam(1).get(0).getUbicacion(), getLstTeam(2).get(0).getUbicacion());
-	mostrarTablero();
-	String ub, k;
-	System.out.println("\n- Soldados restantes en el Ej√©rcito N¬∞1: " + getLstTeam(1).size()
-			+ "\n- Soldados restantes en el Ej√©rcito N¬∞2: " + getLstTeam(2).size() 
-			+ "\nTURNO DEL JUGADOR N¬∞" + team 
-			+ "\n***" + getLstTeam(team).get(0).getNombre() + "  ");
-	ub = getLstTeam(team).get(0).getUbicacion(); 
-	int aux = 1;
+		Scanner sc= new Scanner(System.in);
+		mostrarTablero();
+		String ub, k;
+		System.out.println("\n- Soldados restantes en el EjÈrcito N∞1: " + getLstTeam(1).size()
+				+ "\n- Vida de la Torre 1: " + getEjercito(1).getTorre().getVidaTorre()
+				+ "\n\n- Soldados restantes en el EjÈrcito N∞2: " + getLstTeam(2).size()
+				+ "\n- Vida de la Torre 2: " + getEjercito(2).getTorre().getVidaTorre()
+				+ "\nTURNO DEL JUGADOR N¬∞" + team 
+				+ "\n***" + getLstTeam(team).get(0).getNombre() + "  ");
+		ub = getLstTeam(team).get(0).getUbicacion(); 
+		int aux = 1;
+		ArrayList<String> movValidos = new ArrayList<String>(); 
         if (team == 2)
             aux = -1;
-        //muestra las posiciones v√°lidas para el movimiento del soldado
+        //muestra las posiciones v·lidas para el movimiento del soldado
         for(int j = -1; j <= 1; j++) {
         	System.out.print("\t\t\t");
             k = Tablero.toKey(getLista().get(ub).getNfila() + j, getLista().get(ub).getNcolumna() + aux);				
                 if(k.equals("-"))
                     System.out.print(" X");
-                else
+                else {
+                	movValidos.add(k);
                     System.out.print(k);
+                }
             System.out.print("\n");	
-	}					
-	
-	System.out.println("- Ingrese la posici√≥n indicada: ");
-        k = sc.next();		
-    if(!getLista().containsKey(k)) {
-    	getEjercito(team).moverSoldado(ub, k);
-        if(miTablero.esMina(k))
-            bomba(team, k);
-	}
-	else {
-            System.out.println("Son de diferente equipo");
-	}
-	System.out.print("\n");
-    }  
+        }
+        
+	    while(true){
+			System.out.println("- °Tiene " + miTablero.getCuadrante(ub).getNumero() + " minas alrededor!");
+			System.out.print("---> Ingrese la posiciÛn indicada: ");
+		    k = sc.next();
+		    if(movValidos.contains(k))
+		    	break;
+		    System.out.print("---> °Movimiento no permitido!\n\n");
+	    }
+	    
+	    if(!getLista().containsKey(k)) {    	
+	    	getEjercito(team).moverSoldado(ub, k);    	
+	        if(miTablero.esMina(k))
+	            ActivarMina(team, k);        
+		}
+		else {
+			lucha(ub, k);
+		}
+	    
+	    if (getLista().containsKey(k)) { 
+		    if(getLista().get(k).getNcolumna() == 12 || getLista().get(k).getNcolumna() == 1) {
+		    	if(getLista().get(k).getNcolumna() == 12 && team ==1)
+		    		atacarTorre(team);
+		    	if(getLista().get(k).getNcolumna() == 1 && team ==2)
+		    		atacarTorre(team);
+		    	getEjercito(team).retirarSoldado(k);
+		    	int team2 = 2;
+		    	if (team == 2)
+		    		team2= 1;
+		        if(getEjercito(team2).getTorre().getVidaTorre() == 0)
+		        	getEjercito(team2).getTorre().torreDestruida();
+		    }
+	    }
+		System.out.print("\n");
+    }
     
     //imprime un mensaje y elimina al soldado que piso una mina
-    public void bomba(int team, String ub) {
+    public void ActivarMina(int team, String ub) {
         System.out.println("PISASTE UNA BOMBA");
         getEjercito(team).retirarSoldado(ub);
         miTablero.quitarMina(ub);
     }
     
-    public void atacarTorre() {
-        
+    public void lucha(String ub1, String ub2) {
+    	int num= (int)(Math.random() * 2);
+    	int team1= getLista().get(ub1).getTeam();
+    	int team2= getLista().get(ub2).getTeam();
+    	if (num == 1) {
+    		System.out.println("---> Gana " + getLista().get(ub1).getNombre());
+    		getEjercito(team2).retirarSoldado(ub2);
+    		getEjercito(team1).moverSoldado(ub1, ub2);
+    	}
+    	else {
+    		System.out.println("---> Gana " + getLista().get(ub2).getNombre());
+    		getEjercito(team1).retirarSoldado(ub1);    		
+    	}
+    }
+    
+    public void atacarTorre(int team) {
+        if (team== 1) {
+        	System.out.println("---> °La torre 2 ha sido atacada!");
+        	getEjercito(2).getTorre().torreAtacada();        	
+        }
+        else {
+
+        	System.out.println("---> °La torre 1 ha sido atacada!");
+        	getEjercito(1).getTorre().torreAtacada();
+        }
     }
 }
