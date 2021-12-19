@@ -13,7 +13,7 @@ public class Game extends JFrame {
     private static final int ALTO = 800;
     private JButton[][] buttons;
     private String texto= "";
-    private int fAux, cAux, turno= 1;
+    private int fAux= 5, cAux= 5, turno= 1;
     // c
     public Game() {
         miTablero = new Tablero();
@@ -56,35 +56,39 @@ public class Game extends JFrame {
     	   for (int f= 0; f< buttons.length; f++) {
     		   for(int c= 0; c< buttons[0].length; c++) {
     			   if(e.getSource() == buttons[f][c]) {
-    				   hacerCambio(buttons[f][c], f, c);
+    				   movimiento(buttons[f][c], f, c);
     			   }
     		   }
     	   }
        }
    }
    
-   public void hacerCambio(JButton b, int f, int c) {
-	   if(!b.getText().equals("")) {
+   public void movimiento(JButton b, int f, int c) {
+	   if((getLista().get(Tablero.toKey(f + 1,c + 1)).getTeam() + turno) % 2== 0) {
+		   JOptionPane.showMessageDialog(null, "****");
 		   texto= b.getText();
 		   fAux= f;
 		   cAux= c;
 		   cambiarColor(f,c, Color.RED);
 	   }
-	   else if(!verificar(f , c)) {
-		   JOptionPane.showMessageDialog(null, "Movimiento incorrecto");
-	   }
-	   else {
-		   buttons[fAux][cAux].setText("");
-		   b.setText(texto);
-		   texto= "";
-		   Mensaje();
-		   //Definir Color
-		   cambiarColor(fAux, cAux, new Color(255,255,255));
-		   if(c == 11 && turno % 2 != 0)
-			   JOptionPane.showMessageDialog(null, "Torre 2 Atacada");
-		   else if(c== 0 && turno % 2 == 0)
-			   JOptionPane.showMessageDialog(null, "Torre 1 Atacada");
-		   turno++;
+	   else {JOptionPane.showMessageDialog(null, "Bloque2");
+		   if((getLista().get(Tablero.toKey(f + 1,c + 1)).getTeam() + turno) % 2 != 0 || !verificar(f , c)) {
+			   JOptionPane.showMessageDialog(null, "Movimiento incorrecto");}
+		   
+		   else {
+			   JOptionPane.showMessageDialog(null, "Else");
+			   buttons[fAux][cAux].setText("");
+			   b.setText(texto);
+			   texto= "";
+			   Mensaje();
+			   //Definir Color
+			   cambiarColor(fAux, cAux, new Color(255,255,255));
+			   if(c == 11 && turno % 2 != 0)
+				   JOptionPane.showMessageDialog(null, "Torre 2 Atacada");
+			   else if(c== 0 && turno % 2 == 0)
+				   JOptionPane.showMessageDialog(null, "Torre 1 Atacada");
+			   turno++;
+		   }
 	   }
    }
    
