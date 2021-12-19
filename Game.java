@@ -1,16 +1,65 @@
 import java.util.*;
-public class Game {
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.*;
+
+public class Game extends JFrame {
     private Tablero miTablero;
     private Ejercito ejer1;
     private Ejercito ejer2;
     private String [] datos = {"Plano","Jugador 1","Jugador2"};
+    private static final int ANCHO = 960;
+    private static final int ALTO = 800;
+    private JButton[][] buttons;
     
-    //constructor
     public Game() {
         miTablero = new Tablero();
         ejer1 = new Ejercito(1, 1);
         ejer2 = new Ejercito(12, 2);
+        JOptionPane.showMessageDialog(null, "Bienvenido, usted va a pasarlo muy bien");
+        setTitle("Videojuego");
+        setSize(ANCHO, ALTO);
+        setLayout(new GridLayout(10,12));
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        createContents();
+        setVisible(true);        
     }
+   public void createContents() {     
+       buttons = new JButton[10][12];
+       for (int i=0; i<10; i++){
+           for (int j=0; j<12; j++) {             
+               buttons[i][j] = new JButton();
+               if (j == 0 || j == 11) {
+                   buttons[i][j].setBackground(Color.GREEN);
+               }
+               add(buttons[i][j]);
+               buttons[i][j].addActionListener(new mensajeInicial());
+           }
+       }              
+   }
+   private class mensajeInicial implements ActionListener {
+       public void actionPerformed(ActionEvent e) {              
+           JOptionPane.showMessageDialog(null, "\n- Soldados restantes en el EjÃ©rcito NÂ°1: " + getLstTeam(1).size()
+				+ "\n- Vida de la Torre 1: " + getEjercito(1).getTorre().getVidaTorre()
+				+ "\n\n- Soldados restantes en el EjÃ©rcito NÂ°2: " + getLstTeam(2).size()
+				+ "\n- Vida de la Torre 2: " + getEjercito(2).getTorre().getVidaTorre()
+				+ "\nTURNO DEL JUGADOR NÃ‚Â° 1" 
+				+ "\n***" + getLstTeam(1).get(0).getNombre());
+           
+       }
+   }  
+   private class hacerMovimiento implements ActionListener {
+       public void actionPerformed(ActionEvent e) {              
+
+       }
+   }  
+   
+   
+
+
+
+    
     
     //Inicia todo el juego
     public void iniciarJuego() {
@@ -19,7 +68,7 @@ public class Game {
             if(hayJuego())
             mover(2);
         }
-        System.out.println("\n---> ¡JUEGO TERMINADO!");
+        System.out.println("\n---> Â¡JUEGO TERMINADO!");
     }
     
     // Verifica si el juego se termino
@@ -28,61 +77,7 @@ public class Game {
     			&& ejer1.getTorre().enPie() && ejer2.getTorre().enPie());
     }
     
-    //Imprime el tablero de juego
-    public void imprimirTablero(String pos1, String pos2){
-        System.out.println("\n \tA\tB\tC\tD\tE\tF\tG\tH\tI\tJ\tK\tL");
-        for (int i=0; i<miTablero.getCuadrantes().length; i++){
-            System.out.print("\n"+(i+1)+"\t");
-            for (int j=0; j<miTablero.getCuadrantes()[0].length; j++){
-                if (miTablero.getCuadrantes()[i][j] == null) continue;
-                if (Tablero.toKey(i+1, j+1).equals(pos1) || Tablero.toKey(i+1, j+1).equals(pos2)) 
-                    System.out.print("S\t");   
-                else if (miTablero.getCuadrantes()[i][j].getEstadoOculto())
-                    System.out.print("-\t");
-                else {
-                    if (miTablero.getCuadrantes()[i][j] instanceof Mina)
-                        System.out.print("*\t");
-                    else 
-                        System.out.print("-\t");
-                }
-            }
-        }  
-    }
-    
-    /// TABLERO CON FORMATO    
-	public void mostrarTablero() {
-		String pos1= getLstTeam(1).get(0).getUbicacion();
-		String pos2= getLstTeam(2).get(0).getUbicacion();
-		System.out.print("////////////////////////////////////////////////////////////"
-				+ "////////// \n\t\t\tMOSTRANDO EL TABLERO\n"
-				+ "\n\t    A   B   C   D   E   F   G   H   I   J   K   L\n"
-				+ "\t   -------------------------------------------------\n");
-		String k;
-		for(int f= 1; f<= 10; f++) {
-			if (f< 10)
-				System.out.print("\t");
-			else
-				System.out.print("       ");
-			System.out.print(f + " |");
-			for(int c=1; c<= 12; c++) {
-				k= Tablero.toKey(f, c);
-				if (miTablero.esMina(k))
-					System.out.print(" * ");
-				else if (k.equals(pos1))
-					System.out.print(" & ");
-				else if (k.equals(pos2))
-					System.out.print(" ¥ ");				
-				else
-					System.out.print("   ");
-				System.out.print("|");
-			}
-			System.out.print("\n\t  -------------------------------------------------\n");
-		}
-		System.out.println("\n---> Reino N°1: " + datos[1] + " (&)"
-				+ "\n---> Reino N°2: " + datos[2] + " (¥)");
-	}
-    
-    //devuelve la lista ordenda segÃºn el equipo
+    //devuelve la lista ordenda segÃƒÂºn el equipo
     public ArrayList<Soldado> getLstTeam(int team){
         if (team == 1)
             return ejer1.getLstOrdenada();
@@ -110,20 +105,14 @@ public class Game {
     //permite mover al soldado de al soldado 
     public void mover(int team) {
 		Scanner sc= new Scanner(System.in);
-		mostrarTablero();
 		String ub, k;
-		System.out.println("\n- Soldados restantes en el Ejército N°1: " + getLstTeam(1).size()
-				+ "\n- Vida de la Torre 1: " + getEjercito(1).getTorre().getVidaTorre()
-				+ "\n\n- Soldados restantes en el Ejército N°2: " + getLstTeam(2).size()
-				+ "\n- Vida de la Torre 2: " + getEjercito(2).getTorre().getVidaTorre()
-				+ "\nTURNO DEL JUGADOR NÂ°" + team 
-				+ "\n***" + getLstTeam(team).get(0).getNombre() + "  ");
+		System.out.println();
 		ub = getLstTeam(team).get(0).getUbicacion(); 
 		int aux = 1;
 		ArrayList<String> movValidos = new ArrayList<String>(); 
         if (team == 2)
             aux = -1;
-        //muestra las posiciones válidas para el movimiento del soldado
+        //muestra las posiciones vÃ¡lidas para el movimiento del soldado
         for(int j = -1; j <= 1; j++) {
         	System.out.print("\t\t\t");
             k = Tablero.toKey(getLista().get(ub).getNfila() + j, getLista().get(ub).getNcolumna() + aux);				
@@ -137,12 +126,12 @@ public class Game {
         }
         
 	    while(true){
-			System.out.println("- ¡Tiene " + miTablero.getCuadrante(ub).getNumero() + " minas alrededor!");
-			System.out.print("---> Ingrese la posición indicada: ");
+			System.out.println("- Â¡Tiene " + miTablero.getCuadrante(ub).getNumero() + " minas alrededor!");
+			System.out.print("---> Ingrese la posiciÃ³n indicada: ");
 		    k = sc.next();
 		    if(movValidos.contains(k))
 		    	break;
-		    System.out.print("---> ¡Movimiento no permitido!\n\n");
+		    System.out.print("---> Â¡Movimiento no permitido!\n\n");
 	    }
 	    
 	    if(!getLista().containsKey(k)) {    	
@@ -195,12 +184,12 @@ public class Game {
     
     public void atacarTorre(int team) {
         if (team== 1) {
-        	System.out.println("---> ¡La torre 2 ha sido atacada!");
+        	System.out.println("---> Â¡La torre 2 ha sido atacada!");
         	getEjercito(2).getTorre().torreAtacada();        	
         }
         else {
 
-        	System.out.println("---> ¡La torre 1 ha sido atacada!");
+        	System.out.println("---> Â¡La torre 1 ha sido atacada!");
         	getEjercito(1).getTorre().torreAtacada();
         }
     }
