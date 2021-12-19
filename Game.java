@@ -14,7 +14,7 @@ public class Game extends JFrame {
     private JButton[][] buttons;
     private String texto= "";
     private int fAux, cAux, turno= 1;
-    
+    // c
     public Game() {
         miTablero = new Tablero();
         ejer1 = new Ejercito(1, 1);
