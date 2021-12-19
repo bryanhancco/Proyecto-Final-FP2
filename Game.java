@@ -12,6 +12,8 @@ public class Game extends JFrame {
     private static final int ANCHO = 960;
     private static final int ALTO = 800;
     private JButton[][] buttons;
+    private String texto= "";
+    private int fAux, cAux, turno= 1;
     
     public Game() {
         miTablero = new Tablero();
@@ -29,38 +31,79 @@ public class Game extends JFrame {
        buttons = new JButton[10][12];
        for (int i=0; i<10; i++){
            for (int j=0; j<12; j++) {             
-               buttons[i][j] = new JButton();
+               buttons[i][j] = new JButton("");
                if (j == 0 || j == 11) {
                    buttons[i][j].setBackground(Color.GREEN);
                }
                add(buttons[i][j]);
-               buttons[i][j].addActionListener(new mensajeInicial());
+               buttons[i][j].addActionListener(new hacerMovimiento());
            }
-       }              
-   }
-   private class mensajeInicial implements ActionListener {
-       public void actionPerformed(ActionEvent e) {              
-           JOptionPane.showMessageDialog(null, "\n- Soldados restantes en el Ejército N°1: " + getLstTeam(1).size()
-				+ "\n- Vida de la Torre 1: " + getEjercito(1).getTorre().getVidaTorre()
-				+ "\n\n- Soldados restantes en el Ejército N°2: " + getLstTeam(2).size()
-				+ "\n- Vida de la Torre 2: " + getEjercito(2).getTorre().getVidaTorre()
-				+ "\nTURNO DEL JUGADOR NÂ° 1" 
-				+ "\n***" + getLstTeam(1).get(0).getNombre());
-           
        }
-   }  
+       buttons[0][0].setText("PS");
+   }
+   
+   public void Mensaje() {
+       JOptionPane.showMessageDialog(null, "\n- Soldados restantes en el Ejército N°1: " + getLstTeam(1).size()
+			+ "\n- Vida de la Torre 1: " + getEjercito(1).getTorre().getVidaTorre()
+			+ "\n\n- Soldados restantes en el Ejército N°2: " + getLstTeam(2).size()
+			+ "\n- Vida de la Torre 2: " + getEjercito(2).getTorre().getVidaTorre()
+			+ "\nTURNO DEL JUGADOR NÂ° 1" 
+			+ "\n***" + getLstTeam(1).get(0).getNombre());
+   }
+   
    private class hacerMovimiento implements ActionListener {
        public void actionPerformed(ActionEvent e) {              
-
+    	   for (int f= 0; f< buttons.length; f++) {
+    		   for(int c= 0; c< buttons[0].length; c++) {
+    			   if(e.getSource() == buttons[f][c]) {
+    				   hacerCambio(buttons[f][c], f, c);
+    			   }
+    		   }
+    	   }
        }
-   }  
+   }
    
+   public void hacerCambio(JButton b, int f, int c) {
+	   if(!b.getText().equals("")) {
+		   texto= b.getText();
+		   fAux= f;
+		   cAux= c;
+		   cambiarColor(f,c, Color.RED);
+	   }
+	   else if(!verificar(f , c)) {
+		   JOptionPane.showMessageDialog(null, "Movimiento incorrecto");
+	   }
+	   else {
+		   buttons[fAux][cAux].setText("");
+		   b.setText(texto);
+		   texto= "";
+		   Mensaje();
+		   //Definir Color
+		   cambiarColor(fAux, cAux, new Color(255,255,255));
+		   if(c == 11 && turno % 2 != 0)
+			   JOptionPane.showMessageDialog(null, "Torre 2 Atacada");
+		   else if(c== 0 && turno % 2 == 0)
+			   JOptionPane.showMessageDialog(null, "Torre 1 Atacada");
+		   turno++;
+	   }
+   }
    
-
-
-
-    
-    
+   public void cambiarColor(int f, int c, Color color) {
+	   int i= 1;
+	   if (turno % 2== 0)
+		   i= -1;
+	   if (f > 0)
+	   		buttons[f-1][c+i].setBackground(color);
+	   buttons[f][c+i].setBackground(color);
+	   buttons[f+1][c+i].setBackground(color);
+   }
+   
+   public boolean verificar(int f, int c) {
+	   int i= 1;
+	   if (turno % 2== 0)
+		   i= -1;
+	   return Math.abs(f - fAux)<= 1 && c == cAux + i;
+   }
     //Inicia todo el juego
     public void iniciarJuego() {
         while(hayJuego()) {        	
