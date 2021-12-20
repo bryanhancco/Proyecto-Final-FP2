@@ -13,7 +13,8 @@ public class Game extends JFrame {
     private static final int ALTO = 800;
     private JButton[][] buttons;
     private String texto= "";
-    private int fAux= 5, cAux= 5, turno= 1;
+    private int fAux, cAux, turno = 1;
+    private boolean hacerMovimiento;
     // c
     public Game() {
         miTablero = new Tablero();
@@ -36,10 +37,12 @@ public class Game extends JFrame {
                    buttons[i][j].setBackground(Color.GREEN);
                }
                add(buttons[i][j]);
-               buttons[i][j].addActionListener(new hacerMovimiento());
+               buttons[i][j].addActionListener(new seleccionarPosicion());
+               buttons[i][j].addActionListener(new mover());
            }
        }
-       buttons[0][0].setText("PS");
+       buttons[0][0].setText("PS1");
+       buttons[0][11].setText("PS2");
    }
    
    public void Mensaje() {
@@ -51,45 +54,58 @@ public class Game extends JFrame {
 			+ "\n***" + getLstTeam(1).get(0).getNombre());
    }
    
-   private class hacerMovimiento implements ActionListener {
+   private class seleccionarPosicion implements ActionListener {
+       
+       public void actionPerformed(ActionEvent e) {     
+           int c = 0;
+            if (turno%2 == 0)
+                c = 11;
+    	   for (int f= 0; f< buttons.length; f++) {
+    		   if(e.getSource() == buttons[f][c]) {
+                        seleccionarSoldado(f, c);
+    		}
+    	   }
+       }
+   }
+   private class mover implements ActionListener {
        public void actionPerformed(ActionEvent e) {              
     	   for (int f= 0; f< buttons.length; f++) {
     		   for(int c= 0; c< buttons[0].length; c++) {
-    			   if(e.getSource() == buttons[f][c]) {
-    				   movimiento(buttons[f][c], f, c);
+    			   if(e.getSource() == buttons[f][c] && hacerMovimiento == true) {
+                                 movimiento(buttons[f][c], f, c);
     			   }
     		   }
     	   }
        }
    }
-   
-   public void movimiento(JButton b, int f, int c) {
-	   if((getLista().get(Tablero.toKey(f + 1,c + 1)).getTeam() + turno) % 2== 0) {
+   public void seleccionarSoldado(int f, int c) {
+       if(getLista().get(Tablero.toKey(f + 1,c + 1)).getTeam() == (turno+1)%2 +1) {
 		   JOptionPane.showMessageDialog(null, "****");
-		   texto= b.getText();
-		   fAux= f;
-		   cAux= c;
-		   cambiarColor(f,c, Color.RED);
-	   }
-	   else {JOptionPane.showMessageDialog(null, "Bloque2");
-		   if((getLista().get(Tablero.toKey(f + 1,c + 1)).getTeam() + turno) % 2 != 0 || !verificar(f , c)) {
-			   JOptionPane.showMessageDialog(null, "Movimiento incorrecto");}
-		   
-		   else {
-			   JOptionPane.showMessageDialog(null, "Else");
-			   buttons[fAux][cAux].setText("");
-			   b.setText(texto);
-			   texto= "";
-			   Mensaje();
-			   //Definir Color
-			   cambiarColor(fAux, cAux, new Color(255,255,255));
-			   if(c == 11 && turno % 2 != 0)
-				   JOptionPane.showMessageDialog(null, "Torre 2 Atacada");
-			   else if(c== 0 && turno % 2 == 0)
-				   JOptionPane.showMessageDialog(null, "Torre 1 Atacada");
-			   turno++;
-		   }
-	   }
+                    texto= buttons[f][c].getText();
+                    fAux= f;
+                    cAux= c;
+                    cambiarColor(f,c, Color.RED);
+                    hacerMovimiento = true;
+       }
+       else {
+		JOptionPane.showMessageDialog(null, "Seleccione a su soldado");
+       }
+   } 
+   public void movimiento(JButton b, int f, int c) {
+       
+                    buttons[fAux][cAux].setText(texto);
+                    texto= "";
+                    b.setText(texto);
+                    Mensaje();
+                     //Definir Color
+                    cambiarColor(fAux, cAux, new Color(255,255,255));
+                    if(c == 11 && turno % 2 != 0)
+                            JOptionPane.showMessageDialog(null, "Torre 2 Atacada");
+                    else if(c== 0 && turno % 2 == 0)
+                            JOptionPane.showMessageDialog(null, "Torre 1 Atacada");
+                    turno++;
+		   hacerMovimiento = false;
+            
    }
    
    public void cambiarColor(int f, int c, Color color) {
@@ -97,9 +113,10 @@ public class Game extends JFrame {
 	   if (turno % 2== 0)
 		   i= -1;
 	   if (f > 0)
-	   		buttons[f-1][c+i].setBackground(color);
+	   	buttons[f-1][c+i].setBackground(color);
 	   buttons[f][c+i].setBackground(color);
-	   buttons[f+1][c+i].setBackground(color);
+           if (f < 10)
+                buttons[f+1][c+i].setBackground(color);
    }
    
    public boolean verificar(int f, int c) {
