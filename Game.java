@@ -33,19 +33,19 @@ public class Game extends JFrame {
        for (int i=0; i<10; i++){
            for (int j=0; j<12; j++) {             
                buttons[i][j] = new JButton("");
-               if (j == 0 || j == 11) 
+               if (j == 0 || j == 11) {
                    buttons[i][j].setBackground(Color.GREEN);
+                   buttons[i][j].setText(getLista().get(Tablero.toKey(i + 1,j + 1)).getName());
+               }
                //agregue esta condicional para que los demÃ¡s cuadrantes quedasen blancos
                else
                    buttons[i][j].setBackground(Color.WHITE);
                add(buttons[i][j]);
+               if (miTablero.getCuadrantes()[i][j].tieneMina)
+            	   buttons[i][j].setText("*");
                buttons[i][j].addActionListener(new acciones());
            }
        }
-       buttons[0][0].setText("PS1");
-       buttons[0][11].setText("PS2");
-       buttons[9][0].setText("PS3");
-       buttons[9][11].setText("PS4");
    }
    
    public void Mensaje() {
@@ -79,6 +79,7 @@ public class Game extends JFrame {
                 fAux= f;
                 cAux= c;
                 cambiarColor(f,c, Color.RED);
+                JOptionPane.showMessageDialog(null, "¡Tiene " + miTablero.getCuadrantes()[f][c].getNumero()+ " minas cerca!");
                 hacerMovimiento = true; 
             }          
         }
@@ -91,26 +92,32 @@ public class Game extends JFrame {
         buttons[fAux][cAux].setText("");
         buttons[f][c].setText(texto);
         getLista().get(Tablero.toKey(fAux + 1,cAux + 1)).setUbicacion(Tablero.toKey(f + 1, c +1));
-        Mensaje();
-        //Definir Color
+                //Definir Color
         cambiarColor(fAux, cAux, new Color(255,255,255));
-        if(c == 11 && turno % 2 != 0)
+        
+        if(miTablero.getCuadrantes()[f][c].tieneMina) {
+        	JOptionPane.showMessageDialog(null, "¡Pisaste una mina!");
+        	miTablero.getCuadrantes()[f][c]= new Libre(f,c);
+        	buttons[f][c].setText("");
+        }
+        else if(c == 11 && turno % 2 != 0)
             JOptionPane.showMessageDialog(null, "Torre 2 Atacada");
         else if(c== 0 && turno % 2 == 0)
             JOptionPane.showMessageDialog(null, "Torre 1 Atacada");
+        Mensaje();
         turno++;
 	hacerMovimiento = false;       
     }
    
     public void cambiarColor(int f, int c, Color color) {
-	int i= 1;
-	if (turno % 2== 0)
-            i= -1;
-	if (f > 0)
-            buttons[f-1][c+i].setBackground(color);
-	buttons[f][c+i].setBackground(color);
+		int i= 1;
+		if (turno % 2== 0)
+	            i= -1;
+		if (f > 0)
+	            buttons[f-1][c+i].setBackground(color);
+		buttons[f][c+i].setBackground(color);
         //agregue este condicional para los cuadrantes que se ubiquen en la ultima columna
-        if (f < 10)
+        if (f < 9)
             buttons[f+1][c+i].setBackground(color);
     }   
     public boolean verificar(int f, int c) {

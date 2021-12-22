@@ -30,6 +30,10 @@ public class Soldado {
 		return nombre;
 	}
 	
+	public String getName() {
+		return "S" + team + "-" + getNumero();
+	}
+	
 	public int getTeam() {
 		return team;
 	}
