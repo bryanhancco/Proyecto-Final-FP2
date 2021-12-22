@@ -1,3 +1,4 @@
+
 public class Libre extends Cuadrante {
     private int numero;
     private boolean tieneEscudo;
@@ -7,16 +8,16 @@ public class Libre extends Cuadrante {
         super(f, c);
         tieneMina = false;
     }
-    
     public void setNumero(int num) {
         numero = num;
     }
-    
     public void setEscudo(){
         tieneEscudo = true;
     }
-    
     public int getNumero() {
         return numero;
+    }
+    public void disminuirCantidad() {
+        numero--;
     }
 }
