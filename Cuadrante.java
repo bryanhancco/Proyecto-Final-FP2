@@ -32,5 +32,8 @@ public class Cuadrante {
     public int getNumero() {
     	return 0;
     }
+    
+    public void setNumero(int num) {
+    }
 }
 

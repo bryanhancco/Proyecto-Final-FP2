@@ -73,32 +73,47 @@ public class Game extends JFrame {
     }
     public void seleccionarSoldado(int f, int c) {
         //solucion temporal, se puede mejorar
-        if(getLista().get(Tablero.toKey(f + 1,c + 1)) != null) {
-            if (getLista().get(Tablero.toKey(f + 1,c + 1)).getTeam() == (turno+1)%2 + 1) {
-               texto= buttons[f][c].getText();
-                fAux= f;
-                cAux= c;
-                cambiarColor(f,c, Color.RED);
-                JOptionPane.showMessageDialog(null, "¡Tiene " + miTablero.getCuadrantes()[f][c].getNumero()+ " minas cerca!");
-                hacerMovimiento = true; 
-            }          
+    	int team= (turno+1)%2 + 1;
+    	Soldado selec= getLista().get(Tablero.toKey(f + 1,c + 1));
+        if(selec != null && getLstTeam(team).get(0) == selec) {
+	       texto= buttons[f][c].getText();
+	        fAux= f;
+	        cAux= c;
+	        cambiarColor(f,c, Color.RED);
+	        JOptionPane.showMessageDialog(null, "¡Tiene " + miTablero.getCuadrantes()[f][c].getNumero()+ " minas cerca!");
+	        hacerMovimiento = true; 
         }
         else
-            JOptionPane.showMessageDialog(null, "Seleccione a su soldado");
+            JOptionPane.showMessageDialog(null, "Seleccione el soldado disponible");
        
-   } 
+   }    
+    
+    public JButton boton(String ub) {
+    	int large = ub.length();
+        String columna = ub.substring(large - 1);
+        int col = columna.compareTo("A");
+        int fila = Integer.parseInt(ub.substring(0, ub.length() - 1)) -1;
+    	return buttons[fila][col];
+    }
+    
     //cambia la ubicacion del soldado, tanto en el tablero, como en el HashMap
     public void movimiento(JButton b, int f, int c) {
+    	int team= (turno+1)%2 + 1;
         buttons[fAux][cAux].setText("");
         buttons[f][c].setText(texto);
         getLista().get(Tablero.toKey(fAux + 1,cAux + 1)).setUbicacion(Tablero.toKey(f + 1, c +1));
                 //Definir Color
         cambiarColor(fAux, cAux, new Color(255,255,255));
+        getEjercito(team).moverSoldado(Tablero.toKey(fAux + 1, cAux + 1),Tablero.toKey(f + 1, c + 1));       
         
         if(miTablero.getCuadrantes()[f][c].tieneMina) {
         	JOptionPane.showMessageDialog(null, "¡Pisaste una mina!");
         	miTablero.getCuadrantes()[f][c]= new Libre(f,c);
         	buttons[f][c].setText("");
+        	getEjercito(team).getSoldados().remove(Tablero.toKey(f + 1, c + 1));
+        	JOptionPane.showMessageDialog(null, "Se elimino");
+        	//ARREGLAR - NUMERO MINA
+        	miTablero.getCuadrantes()[f][c].setNumero(miTablero.getCuadrantes()[f][c].getNumero() - 1);
         }
         else if(c == 11 && turno % 2 != 0)
             JOptionPane.showMessageDialog(null, "Torre 2 Atacada");
@@ -106,7 +121,7 @@ public class Game extends JFrame {
             JOptionPane.showMessageDialog(null, "Torre 1 Atacada");
         Mensaje();
         turno++;
-	hacerMovimiento = false;       
+        hacerMovimiento = false;       
     }
    
     public void cambiarColor(int f, int c, Color color) {
@@ -204,8 +219,7 @@ public class Game extends JFrame {
 	}
 	else 
             lucha(ub, k);
-	
-	    
+		    
 	if (getLista().containsKey(k)) { 
             if(getLista().get(k).getNcolumna() == 12 || getLista().get(k).getNcolumna() == 1) {
 		if(getLista().get(k).getNcolumna() == 12 && team ==1)
