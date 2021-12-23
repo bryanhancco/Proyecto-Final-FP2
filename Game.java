@@ -34,16 +34,21 @@ public class Game extends JFrame {
            for (int j=0; j<12; j++) {             
                buttons[i][j] = new JButton("");
                if (j == 0 || j == 11) {
-                   buttons[i][j].setBackground(Color.GREEN);
-                   buttons[i][j].setText(getLista().get(Tablero.toKey(i + 1,j + 1)).getName());
+                    buttons[i][j].setBackground(Color.GREEN);
+                    buttons[i][j].setText(getLista().get(Tablero.toKey(i + 1,j + 1)).getName());
                }
                //agregue esta condicional para que los demÃ¡s cuadrantes quedasen blancos
-               else
-                   buttons[i][j].setBackground(Color.WHITE);
-               add(buttons[i][j]);
-               if (miTablero.getCuadrantes()[i][j].tieneMina)
-            	   buttons[i][j].setText("*");
+               else {
+                    buttons[i][j].setBackground(Color.WHITE);
+                    if (miTablero.getCuadrantes()[i][j].tieneMina)
+                         buttons[i][j].setText("*");
+                    //else if (miTablero.getCuadrantes()[i][j] instanceof Libre && miTablero.getCuadrantes()[i][j].getNumero() != 0) {
+                      //  if (j == 0 || j == 11) continue;
+                        //buttons[i][j].setText(""+miTablero.getCuadrantes()[i][j].getNumero());
+                    //}
+               }
                buttons[i][j].addActionListener(new acciones());
+               add(buttons[i][j]);
            }
        }
    }
@@ -84,18 +89,15 @@ public class Game extends JFrame {
 	        hacerMovimiento = true; 
         }
         else
-            JOptionPane.showMessageDialog(null, "Seleccione el soldado disponible");
-       
+            JOptionPane.showMessageDialog(null, "Seleccione el soldado disponible");  
    }    
-    
     public JButton boton(String ub) {
     	int large = ub.length();
         String columna = ub.substring(large - 1);
         int col = columna.compareTo("A");
         int fila = Integer.parseInt(ub.substring(0, ub.length() - 1)) -1;
     	return buttons[fila][col];
-    }
-    
+    }    
     //cambia la ubicacion del soldado, tanto en el tablero, como en el HashMap
     public void movimiento(JButton b, int f, int c) {
     	int team= (turno+1)%2 + 1;
@@ -106,7 +108,7 @@ public class Game extends JFrame {
         cambiarColor(fAux, cAux, new Color(255,255,255));
         getEjercito(team).moverSoldado(Tablero.toKey(fAux + 1, cAux + 1),Tablero.toKey(f + 1, c + 1));       
         
-        if(miTablero.getCuadrantes()[f][c].tieneMina) {
+        if (miTablero.getCuadrantes()[f][c] instanceof Mina) {
         	JOptionPane.showMessageDialog(null, "¡Pisaste una mina!");
         	miTablero.getCuadrantes()[f][c]= new Libre(f,c);
         	buttons[f][c].setText("");
@@ -121,19 +123,41 @@ public class Game extends JFrame {
                         if (miTablero.getCuadrantes()[i][j] instanceof Libre){
                             Libre cNum = (Libre) miTablero.getCuadrantes()[i][j];
                             cNum.disminuirCantidad();
+                            if (miTablero.getCuadrantes()[i][j].getNumero() == 0)
+                                buttons[i][j].setText("");
+                            else
+                                buttons[i][j].setText(""+miTablero.getCuadrantes()[i][j].getNumero());
                         }
                     }
                 }
-        }
-        else if(c == 11 && turno % 2 != 0)
+            }
+        else 
+            descubrirNumeros(f, c);
+        /*else if(c == 11 && turno % 2 != 0)
             JOptionPane.showMessageDialog(null, "Torre 2 Atacada");
         else if(c== 0 && turno % 2 == 0)
-            JOptionPane.showMessageDialog(null, "Torre 1 Atacada");
+            JOptionPane.showMessageDialog(null, "Torre 1 Atacada");*/
         Mensaje();
         turno++;
-        hacerMovimiento = false;       
+        hacerMovimiento = false;        
     }
-   
+    public void descubrirNumeros(int f, int c) {
+        if (miTablero.getCuadrantes()[f][c].getNumero() == 0) {
+            for (int i=f-1; i<=f+1; i++){
+                if (i < 0 || i > 9) continue;
+                for (int j=c-1; j<=c+1; j++){
+                    if (j < 0 || j > 11) continue;
+                    if (i == f && j == c) continue;
+                    if (miTablero.getCuadrantes()[i][j] instanceof Libre){
+                        if (miTablero.getCuadrantes()[i][j].getNumero() == 0 )
+                            descubrirNumeros(i, j);
+                        else
+                            buttons[i][j].setText(""+miTablero.getCuadrantes()[i][j].getNumero());
+                    }                 
+                }
+            }
+        }
+    }
     public void cambiarColor(int f, int c, Color color) {
 		int i= 1;
 		if (turno % 2== 0)
