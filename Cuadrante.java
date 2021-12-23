@@ -2,7 +2,6 @@ public class Cuadrante {
     private int fila;
     private int columna;
     protected boolean tieneMina;
-    private boolean estaOculto = false;
     
     public Cuadrante(int f, int c) {
         fila = f;
@@ -25,15 +24,10 @@ public class Cuadrante {
         return columna;
     }
     
-    public boolean getEstadoOculto(){
-        return estaOculto;
-    }
-    
     public int getNumero() {
-    	return 0;
+        return 0;
     }
     
     public void setNumero(int num) {
     }
 }
-
