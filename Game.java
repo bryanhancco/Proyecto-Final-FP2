@@ -14,9 +14,7 @@ public class Game extends JFrame{
     private JButton[][] buttons;
     private String texto= "";
     private int fAux, cAux, turno = 1;
-    private boolean hacerMovimiento;
-    private Color color1, color2;
-    
+    private boolean hacerMovimiento;  
     // c
     public Game() {
         miTablero = new Tablero();
@@ -29,7 +27,6 @@ public class Game extends JFrame{
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         createContents();
         setVisible(true);
-        setColor(new Color(200,80,150),new Color(80,200,60));
     }
     
    public void createContents() {     
@@ -38,13 +35,13 @@ public class Game extends JFrame{
            for (int j=0; j<12; j++) {             
                buttons[i][j] = new JButton("");
                if (j == 0 || j == 11) {
-            	   buttons[i][j].setBackground(color2);
+            	   buttons[i][j].setBackground(new Color(80,200,60));
             	   if(j == 0)
-            		   buttons[i][j].setBackground(color1);                   
+            		   buttons[i][j].setBackground(new Color(200,80,150));                   
                    buttons[i][j].setForeground(Color.WHITE);
                    buttons[i][j].setText(getLista().get(Tablero.toKey(i + 1,j + 1)).getName());
                }
-               //agregue esta condicional para que los demÃ¡s cuadrantes quedasen blancos
+               //agregue esta condicional para que los demÃƒÂ¡s cuadrantes quedasen blancos
                else {
                     buttons[i][j].setBackground(Color.WHITE);
                     if (miTablero.getCuadrantes()[i][j].tieneMina)
@@ -63,11 +60,11 @@ public class Game extends JFrame{
    }
    
    public void Mensaje() {
-       JOptionPane.showMessageDialog(null, "Soldados restantes en el EjÃ©rcito NÂ°1: " + getLstTeam(1).size()
+       JOptionPane.showMessageDialog(null, "Soldados restantes en el EjÃƒÂ©rcito NÃ‚Â°1: " + getLstTeam(1).size()
 			+ "\nVida de la Torre 1: " + getEjercito(1).getTorre().getVidaTorre()
-			+ "\nSoldados restantes en el EjÃ©rcito NÂ°2: " + getLstTeam(2).size()
+			+ "\nSoldados restantes en el EjÃƒÂ©rcito NÃ‚Â°2: " + getLstTeam(2).size()
 			+ "\nVida de la Torre 2: " + getEjercito(2).getTorre().getVidaTorre()
-			+ "\nTURNO DEL JUGADOR NÃ‚Â° 1" 
+			+ "\nTURNO DEL JUGADOR NÃƒâ€šÃ‚Â° 1" 
 			+ "\n" + getLstTeam(1).get(0).getNombre());
    }
  //elimine el otro listener, este hace ambas funciones (en base al valor que tenga hacerMovimiento)
@@ -80,7 +77,7 @@ public class Game extends JFrame{
                         	//if (buttons[f][c].getBackground().equals(Color.RED))
                         		movimiento(buttons[f][c], f, c);
                         	//else
-                        		//JOptionPane.showMessageDialog(null, "�Movimiento Inv�lido!");
+                        		//JOptionPane.showMessageDialog(null, "¡Movimiento Inválido!");
                         }
                         else
                             seleccionarSoldado(f, c);
@@ -98,17 +95,12 @@ public class Game extends JFrame{
 	        fAux= f;
 	        cAux= c;
 	        cambiarColor(f,c, Color.RED);
-	        JOptionPane.showMessageDialog(null, "¡Tiene " + miTablero.getCuadrantes()[f][c].getNumero()+ " minas cerca!");
+	        JOptionPane.showMessageDialog(null, "Â¡Tiene " + miTablero.getCuadrantes()[f][c].getNumero()+ " minas cerca!");
 	        hacerMovimiento = true; 
         }
         else
             JOptionPane.showMessageDialog(null, "Seleccione el soldado disponible");  
    }   
-    
-    public void setColor(Color c1, Color c2){
-    	color1= c1;
-    	color2= c2;
-    }
     
     public JButton boton(String ub) {
     	int large = ub.length();
@@ -134,7 +126,7 @@ public class Game extends JFrame{
 	        getEjercito(team).moverSoldado(Tablero.toKey(fAux + 1, cAux + 1),Tablero.toKey(f + 1, c + 1));       
 	        
          if (miTablero.getCuadrantes()[f][c] instanceof Mina) {
-        	JOptionPane.showMessageDialog(null, "¡Pisaste una mina!");
+        	JOptionPane.showMessageDialog(null, "Â¡Pisaste una mina!");
         	miTablero.getCuadrantes()[f][c]= new Libre(f,c);
         	buttons[f][c].setText("");
         	buttons[f][c].setBackground(Color.WHITE);
@@ -159,6 +151,7 @@ public class Game extends JFrame{
                     }
                 }
             }
+         /*
         else if(c == 11 && turno % 2 != 0) {
             JOptionPane.showMessageDialog(null, "Torre 2 Atacada");
             getEjercito(team).getSoldados().remove(Tablero.toKey(f + 1, c + 1));
@@ -177,41 +170,43 @@ public class Game extends JFrame{
             if (getEjercito(1).getTorre().getVidaTorre() == 0)
             	getEjercito(1).getTorre().torreDestruida();
         }
-        else //CORREGIR BUCLE INFINITO
+*/
+         else if (miTablero.getCuadrantes()[f][c] instanceof Libre)
             descubrirNumeros(f, c);
         Mensaje();
         turno++;
         hacerMovimiento = false;        
     }
     public void descubrirNumeros(int f, int c) {
+        miTablero.getCuadrantes()[f][c].cambiarEstado();
         if (miTablero.getCuadrantes()[f][c].getNumero() == 0) {
             for (int i=f-1; i<=f+1; i++){
                 if (i < 0 || i > 9) continue;
                 for (int j=c-1; j<=c+1; j++){
                     if (j < 0 || j > 11) continue;
-                    if (i == f && j == c) continue;
-                    if (miTablero.getCuadrantes()[i][j] instanceof Libre){
-                    	if(getLista().containsKey(Tablero.toKey(i + 1, j + 1))) continue;
-                        if (miTablero.getCuadrantes()[i][j].getNumero() <= 0 )
-                            descubrirNumeros(i, j);
-                        else if(buttons[i][j].getText().equals(""))
-                            buttons[i][j].setText(""+miTablero.getCuadrantes()[i][j].getNumero());
-                    }                 
+                    if(getLista().containsKey(Tablero.toKey(i + 1, j + 1))) continue;
+                    if (miTablero.getCuadrantes()[i][j] instanceof Mina || !miTablero.getCuadrantes()[i][j].getEstado()) continue;   
+                    if (miTablero.getCuadrantes()[i][j].getNumero() > 0 ) {
+                        buttons[i][j].setText(""+miTablero.getCuadrantes()[i][j].getNumero());     
+                        miTablero.getCuadrantes()[i][j].cambiarEstado();
+                    }
+                    else 
+                        descubrirNumeros(i, j);
+                                     
                 }
             }
-        }
+        }           
     }
     public void cambiarColor(int f, int c, Color color) {
-		int i= 1;
-		if (turno % 2== 0)
-	            i= -1;
-		if (f > 0)
-	            buttons[f-1][c+i].setBackground(color);
-		buttons[f][c+i].setBackground(color);
+        int i= 1;
+        if (turno % 2== 0)
+            i= -1;
+        if (f > 0)
+            buttons[f-1][c+i].setBackground(color);
+        buttons[f][c+i].setBackground(color);
         //agregue este condicional para los cuadrantes que se ubiquen en la ultima columna
         if (f < 9)
-            buttons[f+1][c+i].setBackground(color);
-        
+            buttons[f+1][c+i].setBackground(color);        
     }   
     public boolean verificar(int f, int c) {
         int i= 1;
@@ -226,7 +221,7 @@ public class Game extends JFrame{
             if(hayJuego())
             mover(2);
         }
-        System.out.println("\n---> Â¡JUEGO TERMINADO!");
+        System.out.println("\n---> Ã‚Â¡JUEGO TERMINADO!");
     }
     
     public boolean lucha(String ub1, String ub2) {
@@ -252,7 +247,7 @@ public class Game extends JFrame{
     			&& ejer1.getTorre().enPie() && ejer2.getTorre().enPie());
     }
     
-    //devuelve la lista ordenda segÃƒÂºn el equipo
+    //devuelve la lista ordenda segÃƒÆ’Ã‚Âºn el equipo
     public ArrayList<Soldado> getLstTeam(int team){
         if (team == 1)
             return ejer1.getLstOrdenada();
@@ -287,7 +282,7 @@ public class Game extends JFrame{
 	ArrayList<String> movValidos = new ArrayList<String>(); 
         if (team == 2)
             aux = -1;
-        //muestra las posiciones vÃ¡lidas para el movimiento del soldado
+        //muestra las posiciones vÃƒÂ¡lidas para el movimiento del soldado
         for(int j = -1; j <= 1; j++) {
             System.out.print("\t\t\t");
             k = Tablero.toKey(getLista().get(ub).getNfila() + j, getLista().get(ub).getNcolumna() + aux);				
@@ -300,11 +295,11 @@ public class Game extends JFrame{
             System.out.print("\n");	
         }
 	while(true){
-            System.out.println("- Â¡Tiene " + miTablero.getCuadrante(ub).getNumero() + " minas alrededor!");
-            System.out.print("---> Ingrese la posiciÃ³n indicada: ");
+            System.out.println("- Ã‚Â¡Tiene " + miTablero.getCuadrante(ub).getNumero() + " minas alrededor!");
+            System.out.print("---> Ingrese la posiciÃƒÂ³n indicada: ");
             k = sc.next();
             if(movValidos.contains(k)) break;
-            System.out.print("---> Â¡Movimiento no permitido!\n\n");
+            System.out.print("---> Ã‚Â¡Movimiento no permitido!\n\n");
 	}
 	    
 	if(!getLista().containsKey(k)) {    	
@@ -344,12 +339,12 @@ public class Game extends JFrame{
     
     public void atacarTorre(int team) {
         if (team== 1) {
-        	System.out.println("---> Â¡La torre 2 ha sido atacada!");
+        	System.out.println("---> Ã‚Â¡La torre 2 ha sido atacada!");
         	getEjercito(2).getTorre().torreAtacada();        	
         }
         else {
 
-        	System.out.println("---> Â¡La torre 1 ha sido atacada!");
+        	System.out.println("---> Ã‚Â¡La torre 1 ha sido atacada!");
         	getEjercito(1).getTorre().torreAtacada();
         }
     }
