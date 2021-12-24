@@ -34,18 +34,18 @@ public class Game extends JFrame{
        for (int i=0; i<10; i++){
            for (int j=0; j<12; j++) {             
                buttons[i][j] = new JButton("");
-               if (j == 0 || j == 11) {
-            	   buttons[i][j].setBackground(new Color(80,200,60));
-            	   if(j == 0)
-            		   buttons[i][j].setBackground(new Color(200,80,150));                   
-                   buttons[i][j].setForeground(Color.WHITE);
-                   buttons[i][j].setText(getLista().get(Tablero.toKey(i + 1,j + 1)).getName());
+               if (j == 0 || j == 11) {      
+                    buttons[i][j].setBackground(new Color(80,200,60));
+                    if(j == 0)
+                        buttons[i][j].setBackground(new Color(206,54,45));                  
+                    buttons[i][j].setForeground(Color.WHITE);
+                    buttons[i][j].setText(getLista().get(Tablero.toKey(i + 1,j + 1)).getName());
                }
                //agregue esta condicional para que los demÃƒÂ¡s cuadrantes quedasen blancos
                else {
-                    buttons[i][j].setBackground(Color.WHITE);
-                    if (miTablero.getCuadrantes()[i][j].tieneMina)
-                         buttons[i][j].setText("*");
+                    buttons[i][j].setBackground(new Color(187, 178, 178));
+                    /*if (miTablero.getCuadrantes()[i][j].tieneMina)
+                         buttons[i][j].setText("*");*/
                     //else if (miTablero.getCuadrantes()[i][j] instanceof Libre && miTablero.getCuadrantes()[i][j].getNumero() != 0) {
                       //  if (j == 0 || j == 11) continue;
                         //buttons[i][j].setText(""+miTablero.getCuadrantes()[i][j].getNumero());
@@ -55,8 +55,6 @@ public class Game extends JFrame{
                add(buttons[i][j]);
            }
        }
-       buttons[0][0].setForeground(Color.BLACK);
-       buttons[0][11].setForeground(Color.BLACK);
    }
    
    public void Mensaje() {
@@ -67,17 +65,16 @@ public class Game extends JFrame{
 			+ "\nTURNO DEL JUGADOR NÃƒâ€šÃ‚Â° 1" 
 			+ "\n" + getLstTeam(1).get(0).getNombre());
    }
- //elimine el otro listener, este hace ambas funciones (en base al valor que tenga hacerMovimiento)
     private class acciones implements ActionListener {
         public void actionPerformed(ActionEvent e) {              
             for (int f= 0; f< buttons.length; f++) {
                 for(int c= 0; c< buttons[0].length; c++) {
                     if(e.getSource() == buttons[f][c]) {        	
                         if (hacerMovimiento) {
-                        	//if (buttons[f][c].getBackground().equals(Color.RED))
+                        	if (buttons[f][c].getBackground().equals(Color.RED))
                         		movimiento(buttons[f][c], f, c);
-                        	//else
-                        		//JOptionPane.showMessageDialog(null, "¡Movimiento Inválido!");
+                        	else
+                        		JOptionPane.showMessageDialog(null, "¡Movimiento Inválido!");
                         }
                         else
                             seleccionarSoldado(f, c);
@@ -115,25 +112,24 @@ public class Game extends JFrame{
     	String ub= Tablero.toKey(f + 1, c + 1);
     	String ubAux= Tablero.toKey(fAux + 1, cAux + 1);
     	//if(getLista().containsKey(ub) && lucha(ubAux, ub))
-	        buttons[fAux][cAux].setText("");
-	        //Definir Color
-	        cambiarColor(fAux, cAux, new Color(255,255,255));
-	        buttons[f][c].setBackground( buttons[fAux][cAux].getBackground());
-	        buttons[fAux][cAux].setBackground(new Color(255,255,255));
-	        buttons[f][c].setText(texto);
-	        getLista().get(Tablero.toKey(fAux + 1,cAux + 1)).setUbicacion(Tablero.toKey(f + 1, c +1));
+	buttons[fAux][cAux].setText("");
+	//Definir Color
+	cambiarColor(fAux, cAux, new Color(187, 178, 178));
+
+	buttons[f][c].setBackground( buttons[fAux][cAux].getBackground());
+	buttons[fAux][cAux].setBackground(new Color(187, 178, 178));
+	buttons[f][c].setText(texto);
+	getLista().get(Tablero.toKey(fAux + 1,cAux + 1)).setUbicacion(Tablero.toKey(f + 1, c +1));
 	                
-	        getEjercito(team).moverSoldado(Tablero.toKey(fAux + 1, cAux + 1),Tablero.toKey(f + 1, c + 1));       
+	getEjercito(team).moverSoldado(Tablero.toKey(fAux + 1, cAux + 1),Tablero.toKey(f + 1, c + 1));       
 	        
-         if (miTablero.getCuadrantes()[f][c] instanceof Mina) {
+        if (miTablero.getCuadrantes()[f][c] instanceof Mina) {
         	JOptionPane.showMessageDialog(null, "Â¡Pisaste una mina!");
         	miTablero.getCuadrantes()[f][c]= new Libre(f,c);
         	buttons[f][c].setText("");
-        	buttons[f][c].setBackground(Color.WHITE);
+        	buttons[f][c].setBackground(new Color(187, 178, 178));
         	getEjercito(team).getSoldados().remove(Tablero.toKey(f + 1, c + 1));
         	boton(getLstTeam(team).get(0).getUbicacion()).setForeground(Color.BLACK);
-        	//el siguiente ciclo reducira el numero correspondiente, de todos los
-                //casilleros que circunden a la posicion de la mina
                 for (int i=f-1; i<=f+1; i++){
                     if (i < 0 || i > 9) continue;
                     for (int j=c-1; j<=c+1; j++){
@@ -143,15 +139,19 @@ public class Game extends JFrame{
                             Libre cNum = (Libre) miTablero.getCuadrantes()[i][j];
                             cNum.disminuirCantidad();
                             if(getLista().containsKey(Tablero.toKey(i + 1, j + 1))) continue;
-                            if (cNum.getNumero() <= 0)
+                            if (cNum.getNumero() <= 0) {
                                 buttons[i][j].setText("");
-                            else
+                                buttons[i][j].setBackground(new Color(187, 178, 178));
+                            }
+                            else {
                                 buttons[i][j].setText(""+miTablero.getCuadrantes()[i][j].getNumero());
+                                buttons[i][j].setBackground(new Color(183, 187, 204));
+                            }
                         }
                     }
                 }
             }
-         /*
+         
         else if(c == 11 && turno % 2 != 0) {
             JOptionPane.showMessageDialog(null, "Torre 2 Atacada");
             getEjercito(team).getSoldados().remove(Tablero.toKey(f + 1, c + 1));
@@ -161,17 +161,16 @@ public class Game extends JFrame{
             if (getEjercito(2).getTorre().getVidaTorre() == 0)
             	getEjercito(2).getTorre().torreDestruida();
         }
-        else if(c== 0 && turno % 2 == 0) {
+        else if(c == 0 && turno % 2 == 0) {
             JOptionPane.showMessageDialog(null, "Torre 1 Atacada");
-            getEjercito(team).getSoldados().remove(Tablero.toKey(f + 1, c + 1));
-            getEjercito(1).getTorre().torreAtacada();
+            getEjercito(team).getSoldados().remove(Tablero.toKey(f + 1, c + 1));            
             boton(Tablero.toKey(f + 1, c + 1)).setBackground(Color.WHITE);
             boton(Tablero.toKey(f + 1, c + 1)).setText("");
+            getEjercito(1).getTorre().torreAtacada();
             if (getEjercito(1).getTorre().getVidaTorre() == 0)
             	getEjercito(1).getTorre().torreDestruida();
         }
-*/
-         else if (miTablero.getCuadrantes()[f][c] instanceof Libre)
+        else if (miTablero.getCuadrantes()[f][c] instanceof Libre)
             descubrirNumeros(f, c);
         Mensaje();
         turno++;
@@ -189,10 +188,10 @@ public class Game extends JFrame{
                     if (miTablero.getCuadrantes()[i][j].getNumero() > 0 ) {
                         buttons[i][j].setText(""+miTablero.getCuadrantes()[i][j].getNumero());     
                         miTablero.getCuadrantes()[i][j].cambiarEstado();
+                        buttons[i][j].setBackground(new Color(183, 187, 204));
                     }
                     else 
                         descubrirNumeros(i, j);
-                                     
                 }
             }
         }           
