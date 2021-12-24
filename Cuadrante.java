@@ -2,6 +2,7 @@ public class Cuadrante {
     private int fila;
     private int columna;
     protected boolean tieneMina;
+    private boolean estaOculto = true;
     
     public Cuadrante(int f, int c) {
         fila = f;
@@ -16,6 +17,12 @@ public class Cuadrante {
         this.columna = columna;
     }
     
+    public void cambiarEstado() {
+        estaOculto = false;
+    }
+    public boolean getEstado() {
+        return estaOculto;
+    }
     public int getFila() {
         return fila;
     }
