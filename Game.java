@@ -2,18 +2,20 @@ import java.util.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.*;
 
 public class Game extends JFrame{
     private Tablero miTablero;
     private Ejercito ejer1;
     private Ejercito ejer2;
     private String [] datos = {"Plano","Jugador 1","Jugador2"};
+    private HashMap<String, JLabel> labels= new HashMap<String, JLabel>();
     private Color[] colores = new Color[3];
-    private static final int ANCHO = 960;
+    private static final int ANCHO = 1400;
     private static final int ALTO = 800;
     private JButton[][] buttons;
     private String texto= "";
+	private JPanel turnoPanel;
+	private JPanel tablero, estadisticas;
     private int fAux, cAux, turno = 1;
     private boolean hacerMovimiento;
     
@@ -24,12 +26,19 @@ public class Game extends JFrame{
         //JOptionPane.showMessageDialog(null, "Bienvenido, usted va a pasarlo muy bien");
         setTitle("Videojuego");
         setSize(ANCHO, ALTO);
-        setLayout(new GridLayout(10,12));
-        setDefaultCloseOperation(EXIT_ON_CLOSE);              
+        setLayout(new BorderLayout());
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        tablero= new JPanel(new GridLayout(10,12));		
+		tablero.setPreferredSize(new Dimension(1200,800));
+		estadisticas= new JPanel(new GridLayout(13,1));
+		estadisticas.setPreferredSize(new Dimension(350,800));
         colores[0]= new Color(187, 178, 178);
         colores[1]= new Color(206,54,45);
         colores[2]= new Color(80,200,60);
-        createContents();  
+        addLabel(estadisticas);
+        createContents();
+        add(tablero, BorderLayout.CENTER);
+		add(estadisticas, BorderLayout.WEST);
         setVisible(true);
     }
     
@@ -56,7 +65,7 @@ public class Game extends JFrame{
                     //}
                }
                buttons[i][j].addActionListener(new acciones());
-               add(buttons[i][j]);
+               tablero.add(buttons[i][j]);
            }
        }
    }
@@ -103,7 +112,72 @@ public class Game extends JFrame{
         }
         else
             JOptionPane.showMessageDialog(null, "Seleccione el soldado disponible");  
-   }   
+   } 
+    
+	public void addLabel(JPanel t) {					
+		t.add(new JLabel("ESTADÍSTICAS",SwingConstants.CENTER));
+		t.add(new JLabel("Terreno: " + datos[0],SwingConstants.CENTER));
+		t.add(getPanel("R1"));
+		t.add(getPanel("R2"));
+		t.add(new JLabel("Esta jugando:",SwingConstants.CENTER));
+		turnoPanel= getPanel("Turno"); 
+		t.add(turnoPanel);
+		t.add(new JLabel("Soldados Restantes:",SwingConstants.CENTER));
+		t.add(getPanel("r1"));
+		t.add(getPanel("r2"));
+		t.add(getPanel("Mensaje"));
+		t.add(new JLabel(""));
+		t.add(new JLabel(""));
+		JButton bReinicio= new JButton("Reiniciar Juego");
+		
+		labels.get("R1").setText(datos[1]);
+		labels.get("R2").setText(datos[2]);
+		
+		labels.get("R1").setBackground(colores[1]);
+		labels.get("R1").setForeground(negativo(colores[1]));
+		labels.get("R1").setPreferredSize(new Dimension(20,20));
+		labels.get("R2").setBackground(colores[2]);
+		labels.get("R2").setForeground(negativo(colores[2]));
+		
+		bReinicio.addActionListener(new Reiniciar());
+		t.add(bReinicio);
+		actDatos();
+	}
+	
+   private class Reiniciar implements ActionListener {
+       public void actionPerformed(ActionEvent e) {
+    	   JOptionPane.showMessageDialog(null, "Reiniciar");
+       }
+   }
+	
+	public JPanel getPanel(String et) {
+		JPanel p = new JPanel(new BorderLayout());
+		JLabel l= new JLabel("", SwingConstants.CENTER);
+		labels.put(et, l);
+		if(et.equals("R1"))
+			p.setBackground(colores[1]);
+		if(et.equals("R2"))
+			p.setBackground(colores[2]);
+		p.add(l);
+		return p;
+	}
+	
+	public Color negativo(Color c) {
+		int red= c.getRed();
+		int blue= c.getBlue();
+		int green= c.getGreen();
+		c= new Color(255-red, 255- green, 255- blue);
+		return c;
+	}
+	
+	public void actDatos() {
+		int team= (turno+1)%2 + 1;
+		labels.get("Turno").setText(datos[team]);
+		turnoPanel.setBackground(colores[team]);
+		labels.get("Turno").setForeground(negativo(colores[team]));
+		labels.get("r1").setText(datos[1] + ": " + getLstTeam(1).size() + " soldados");
+		labels.get("r2").setText(datos[2] + ": " + getLstTeam(2).size() + " soldados");
+	}
     
     public JButton boton(String ub) {
     	int large = ub.length();
