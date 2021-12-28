@@ -14,8 +14,8 @@ public class Game extends JFrame{
     private static final int ALTO = 800;
     private JButton[][] buttons;
     private String texto= "";
-	private JPanel turnoPanel;
-	private JPanel tablero, estadisticas;
+    private JPanel turnoPanel;
+    private JPanel tablero, estadisticas;
     private int fAux, cAux, turno = 1;
     private boolean hacerMovimiento;
     
@@ -23,22 +23,19 @@ public class Game extends JFrame{
         miTablero = new Tablero();
         ejer1 = new Ejercito(1, 1);
         ejer2 = new Ejercito(12, 2);
-        //JOptionPane.showMessageDialog(null, "Bienvenido, usted va a pasarlo muy bien");
-        setTitle("Videojuego");
+        setTitle("Run And Destroy");
         setSize(ANCHO, ALTO);
         setLayout(new BorderLayout());
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         tablero= new JPanel(new GridLayout(10,12));		
-		tablero.setPreferredSize(new Dimension(1200,800));
-		estadisticas= new JPanel(new GridLayout(13,1));
-		estadisticas.setPreferredSize(new Dimension(350,800));
+	tablero.setPreferredSize(new Dimension(1050,800));
+	estadisticas= new JPanel(new GridLayout(13,1));
+	estadisticas.setPreferredSize(new Dimension(350,800));
         colores[0]= new Color(187, 178, 178);
         colores[1]= new Color(206,54,45);
         colores[2]= new Color(80,200,60);
         addLabel(estadisticas);
-        createContents();
-        add(tablero, BorderLayout.CENTER);
-		add(estadisticas, BorderLayout.WEST);
+        createContents();        
         setVisible(true);
     }
     
@@ -54,20 +51,15 @@ public class Game extends JFrame{
                     buttons[i][j].setForeground(Color.WHITE);
                     buttons[i][j].setText(getLista().get(Tablero.toKey(i + 1,j + 1)).getName());
                }
-               //agregue esta condicional para que los demÃƒÂ¡s cuadrantes quedasen blancos
                else {
-                    buttons[i][j].setBackground(colores[0]);
-                    /*if (miTablero.getCuadrantes()[i][j].tieneMina)
-                         buttons[i][j].setText("*");*/
-                    //else if (miTablero.getCuadrantes()[i][j] instanceof Libre && miTablero.getCuadrantes()[i][j].getNumero() != 0) {
-                      //  if (j == 0 || j == 11) continue;
-                        //buttons[i][j].setText(""+miTablero.getCuadrantes()[i][j].getNumero());
-                    //}
+                    buttons[i][j].setBackground(colores[0]);          
                }
-               buttons[i][j].addActionListener(new acciones());
+               buttons[i][j].addActionListener(new Acciones());
                tablero.add(buttons[i][j]);
            }
        }
+        add(tablero, BorderLayout.CENTER);
+        add(estadisticas, BorderLayout.WEST);
    }
    
    public void Mensaje() {
@@ -75,20 +67,21 @@ public class Game extends JFrame{
 			+ "\nVida de la Torre 1: " + getEjercito(1).getTorre().getVidaTorre()
 			+ "\nSoldados restantes en el Ejercito Nro2: " + getLstTeam(2).size()
 			+ "\nVida de la Torre 2: " + getEjercito(2).getTorre().getVidaTorre()
-			+ "\nTURNO DEL JUGADOR NÃƒâ€šÃ‚Â° 1" 
+			+ "\nTURNO DEL JUGADOR NÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â° 1" 
 			+ "\n" + getLstTeam(1).get(0).getNombre());
    }
    
-    private class acciones implements ActionListener {
+    private class Acciones implements ActionListener {
         public void actionPerformed(ActionEvent e) {              
             for (int f= 0; f< buttons.length; f++) {
                 for(int c= 0; c< buttons[0].length; c++) {
                     if(e.getSource() == buttons[f][c]) {        	
                         if (hacerMovimiento) {
-                        	if (buttons[f][c].getBackground().equals(Color.RED))
-                        		movimiento(buttons[f][c], f, c);
-                        	else
-                        		JOptionPane.showMessageDialog(null, "�Movimiento Invalido!");
+                            if (buttons[f][c].getBackground().equals(Color.RED))
+                        	movimiento(buttons[f][c], f, c);
+                            else
+                        	JOptionPane.showMessageDialog(null, "¡Movimiento Invalido!");
+                            actDatos();
                         }
                         else
                             seleccionarSoldado(f, c);
@@ -99,138 +92,123 @@ public class Game extends JFrame{
     }
     
     public void seleccionarSoldado(int f, int c) {
-        //solucion temporal, se puede mejorar
     	int team= (turno+1)%2 + 1;
     	Soldado selec= getLista().get(Tablero.toKey(f + 1,c + 1));
-        if(selec != null && getLstTeam(team).get(0) == selec) {
-	       texto= buttons[f][c].getText();
-	        fAux= f;
-	        cAux= c;
-	        cambiarColor(f,c, Color.RED);
-	        JOptionPane.showMessageDialog(null, "Â¡Tiene " + miTablero.getCuadrantes()[f][c].getNumero()+ " minas cerca!");
-	        hacerMovimiento = true; 
+        if(selec != null && getLstTeam(team).get(0) == selec) {	       
+            texto= buttons[f][c].getText();
+	    fAux= f;
+	    cAux= c;
+	    cambiarColor(f,c, Color.RED);
+	    JOptionPane.showMessageDialog(null, "Ã‚Â¡Tiene " + miTablero.getCuadrantes()[f][c].getNumero()+ " minas cerca!");
+	    hacerMovimiento = true; 
         }
         else
             JOptionPane.showMessageDialog(null, "Seleccione el soldado disponible");  
-   } 
-    
-	public void addLabel(JPanel t) {					
-		t.add(new JLabel("ESTAD�STICAS",SwingConstants.CENTER));
-		t.add(new JLabel("Terreno: " + datos[0],SwingConstants.CENTER));
-		t.add(getPanel("R1"));
-		t.add(getPanel("R2"));
-		t.add(new JLabel("Esta jugando:",SwingConstants.CENTER));
-		turnoPanel= getPanel("Turno"); 
-		t.add(turnoPanel);
-		t.add(new JLabel("Soldados Restantes:",SwingConstants.CENTER));
-		t.add(getPanel("r1"));
-		t.add(getPanel("r2"));
-		t.add(getPanel("Mensaje"));
-		t.add(new JLabel(""));
-		t.add(new JLabel(""));
-		JButton bReinicio= new JButton("Reiniciar Juego");
-		
-		labels.get("R1").setText(datos[1]);
-		labels.get("R2").setText(datos[2]);
-		
-		labels.get("R1").setBackground(colores[1]);
-		labels.get("R1").setForeground(negativo(colores[1]));
-		labels.get("R1").setPreferredSize(new Dimension(20,20));
-		labels.get("R2").setBackground(colores[2]);
-		labels.get("R2").setForeground(negativo(colores[2]));
-		
-		bReinicio.addActionListener(new Reiniciar());
-		t.add(bReinicio);
-		actDatos();
-	}
+   }     
+    public void addLabel(JPanel t) {					
+        t.add(new JLabel("ESTADÍSTICAS", SwingConstants.CENTER));
+	t.add(new JLabel("Terreno: " + datos[0],SwingConstants.CENTER));
+	t.add(getPanel("R1"));
+	t.add(getPanel("R2"));
+        t.add(new JLabel("Esta jugando:", SwingConstants.CENTER));
+        t.add(turnoPanel = getPanel("Turno"));
+	t.add(new JLabel("Soldados Restantes:", SwingConstants.CENTER));
+        t.add(getPanel("r1"));
+	t.add(getPanel("r2"));
+        t.add(getPanel("Mensaje"));
+	t.add(getPanel("Torre1"));
+        t.add(getPanel("Torre2"));
+	JButton bReinicio= new JButton("Reiniciar Juego");
+        
+	labels.get("R1").setText(datos[1]);
+        labels.get("R2").setText(datos[2]);
 	
-   private class Reiniciar implements ActionListener {
-       public void actionPerformed(ActionEvent e) {
-    	   JOptionPane.showMessageDialog(null, "Reiniciar");
-       }
-   }
+        labels.get("R1").setBackground(colores[1]);
+	labels.get("R1").setForeground(negativo(colores[1]));
+        labels.get("R1").setPreferredSize(new Dimension(20,20));
+	labels.get("R2").setBackground(colores[2]);
+        labels.get("R2").setForeground(negativo(colores[2]));
 	
-	public JPanel getPanel(String et) {
-		JPanel p = new JPanel(new BorderLayout());
-		JLabel l= new JLabel("", SwingConstants.CENTER);
-		labels.put(et, l);
-		if(et.equals("R1"))
-			p.setBackground(colores[1]);
-		if(et.equals("R2"))
-			p.setBackground(colores[2]);
-		p.add(l);
-		return p;
+        bReinicio.addActionListener(new Reiniciar());
+	t.add(bReinicio);
+        actDatos();
 	}
+    //reinicia el videojuego, FALTA COMPLETAR
+    private class Reiniciar implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+            JOptionPane.showMessageDialog(null, "Reiniciando");
+            //createContents();
+        }
+    }
+   //Colorea el cuadrante del string correspondiente
+    public JPanel getPanel(String et) {
+	JPanel p = new JPanel(new BorderLayout());
+	JLabel l = new JLabel("", SwingConstants.CENTER);
+        labels.put(et, l);
+
+        if(et.equals("R1"))
+            p.setBackground(colores[1]);
+        if(et.equals("R2"))
+            p.setBackground(colores[2]);
+        p.add(l);
+	return p;
+    }
+    public Color negativo(Color c) {
+        int red = c.getRed();
+	int blue = c.getBlue();
+        int green = c.getGreen();
+	c = new Color(255-red, 255- green, 255- blue);
+        return c;
+    }
 	
-	public Color negativo(Color c) {
-		int red= c.getRed();
-		int blue= c.getBlue();
-		int green= c.getGreen();
-		c= new Color(255-red, 255- green, 255- blue);
-		return c;
-	}
-	
-	public void actDatos() {
-		int team= (turno+1)%2 + 1;
-		labels.get("Turno").setText(datos[team]);
-		turnoPanel.setBackground(colores[team]);
-		labels.get("Turno").setForeground(negativo(colores[team]));
-		labels.get("r1").setText(datos[1] + ": " + getLstTeam(1).size() + " soldados");
-		labels.get("r2").setText(datos[2] + ": " + getLstTeam(2).size() + " soldados");
-	}
+    public void actDatos() {
+        int team= (turno+1)%2 + 1;
+	labels.get("Turno").setText(datos[team]);
+        turnoPanel.setBackground(colores[team]);
+	labels.get("Turno").setForeground(negativo(colores[team]));
+        labels.get("r1").setText(datos[1] + ": " + getLstTeam(1).size() + " soldados");
+	labels.get("r2").setText(datos[2] + ": " + getLstTeam(2).size() + " soldados");
+        labels.get("r1").setText(datos[1] + ": " + getLstTeam(1).size() + " soldados");
+	labels.get("r2").setText(datos[2] + ": " + getLstTeam(2).size() + " soldados");
+        labels.get("Torre1").setText("Vida de la torre 1: " + ejer1.getTorre().getVidaTorre());
+	labels.get("Torre2").setText("Vida de la torre 2: " + ejer2.getTorre().getVidaTorre());
+    }
     
     public JButton boton(String ub) {
-    	int large = ub.length();
+        int large = ub.length();
         String columna = ub.substring(large - 1);
         int col = columna.compareTo("A");
         int fila = Integer.parseInt(ub.substring(0, ub.length() - 1)) -1;
-    	return buttons[fila][col];
+        return buttons[fila][col];
     }    
     //cambia la ubicacion del soldado, tanto en el tablero, como en el HashMap
     public void movimiento(JButton b, int f, int c) {
-    	int team= (turno+1)%2 + 1;
-    	String ub= Tablero.toKey(f + 1, c + 1);
-    	String ubAux= Tablero.toKey(fAux + 1, cAux + 1);
-    	//if(getLista().containsKey(ub) && lucha(ubAux, ub))
-    	buttons[fAux][cAux].setText("");
-	//Definir Color
-    	cambiarColor(fAux, cAux, colores[0]);
-
-		buttons[f][c].setBackground( buttons[fAux][cAux].getBackground());
-		buttons[fAux][cAux].setBackground(new Color(187, 178, 178));
-		buttons[f][c].setText(texto);
-		getLista().get(Tablero.toKey(fAux + 1,cAux + 1)).setUbicacion(Tablero.toKey(f + 1, c +1));
-	                
-		getEjercito(team).moverSoldado(Tablero.toKey(fAux + 1, cAux + 1),Tablero.toKey(f + 1, c + 1));       
-	        
-        if (miTablero.getCuadrantes()[f][c] instanceof Mina) {
-        	JOptionPane.showMessageDialog(null, "Â¡Pisaste una mina!");
-        	miTablero.getCuadrantes()[f][c]= new Libre(f,c);
-        	buttons[f][c].setText("");
-        	buttons[f][c].setBackground(new Color(187, 178, 178));
-        	getEjercito(team).getSoldados().remove(Tablero.toKey(f + 1, c + 1));
-        	boton(getLstTeam(team).get(0).getUbicacion()).setForeground(Color.BLACK);
-                for (int i=f-1; i<=f+1; i++){
-                    if (i < 0 || i > 9) continue;
-                    for (int j=c-1; j<=c+1; j++){
-                        if (j < 0 || j > 11) continue;
-                        if (i == f && j == c) continue;
-                        if (miTablero.getCuadrantes()[i][j] instanceof Libre){
-                            Libre cNum = (Libre) miTablero.getCuadrantes()[i][j];
-                            cNum.disminuirCantidad();
-                            if(getLista().containsKey(Tablero.toKey(i + 1, j + 1))) continue;
-                            if (cNum.getNumero() <= 0) {
-                                buttons[i][j].setText("");
-                                buttons[i][j].setBackground(new Color(187, 178, 178));
-                            }
-                            else {
-                                buttons[i][j].setText(""+miTablero.getCuadrantes()[i][j].getNumero());
-                                buttons[i][j].setBackground(new Color(183, 187, 204));
-                            }
-                        }
-                    }
-                }
-            }
+        int team = (turno+1)%2 + 1;
+        String ub = Tablero.toKey(f + 1, c + 1);
+        String ubAux = Tablero.toKey(fAux + 1, cAux + 1);
+        buttons[fAux][cAux].setText("");
+        cambiarColor(fAux, cAux, colores[0]);
+	buttons[f][c].setBackground( buttons[fAux][cAux].getBackground());
+	buttons[fAux][cAux].setBackground(new Color(187, 178, 178));
+	buttons[f][c].setText(texto);
+	getLista().get(Tablero.toKey(fAux + 1,cAux + 1)).setUbicacion(Tablero.toKey(f + 1, c +1));	                
+	getEjercito(team).moverSoldado(Tablero.toKey(fAux + 1, cAux + 1),Tablero.toKey(f + 1, c + 1));       
+        if (miTablero.getCuadrantes()[f][c] instanceof Libre)
+            descubrirNumeros(f, c);
+        else if (miTablero.getCuadrantes()[f][c] instanceof Mina) 
+            explotarMina(f, c, team);
+        
+        //condicional que recorta atacar a la torre
+        else if (c == 0 || c == 1) {
+            JOptionPane.showMessageDialog(null, "Torre " + team + " Atacada");
+            getEjercito(team).getSoldados().remove(Tablero.toKey(f + 1, c + 1));
+            boton(Tablero.toKey(f + 1, c + 1)).setBackground(Color.WHITE);
+            boton(Tablero.toKey(f + 1, c + 1)).setText("");
+            getEjercito(team).getTorre().torreAtacada();
+            if (getEjercito(team).getTorre().getVidaTorre() == 0)
+            	getEjercito(team).getTorre().torreDestruida();
+        }
+        /*
         else if(c == 11 && turno % 2 != 0) {
             JOptionPane.showMessageDialog(null, "Torre 2 Atacada");
             getEjercito(team).getSoldados().remove(Tablero.toKey(f + 1, c + 1));
@@ -249,11 +227,50 @@ public class Game extends JFrame{
             if (getEjercito(1).getTorre().getVidaTorre() == 0)
             	getEjercito(1).getTorre().torreDestruida();
         }
-        else if (miTablero.getCuadrantes()[f][c] instanceof Libre)
-            descubrirNumeros(f, c);
+        */
         Mensaje();
         turno++;
         hacerMovimiento = false;        
+    }
+    public void cambiarColor(int f, int c, Color color) {
+        int i = 1;
+        if (turno % 2 == 0)
+            i = -1;
+        for(int j= -1; j<= 1; j++) {
+            if (f + j < 0 || f + j > 9) continue;
+            String k = Tablero.toKey(f + j + 1, c  + i + 1);
+            buttons[f + j][c + i].setBackground(color);
+            if(getLista().containsKey(k) && color.equals(colores[0]))
+                buttons[f + j][c + i].setBackground(colores[turno % 2 + 1]);
+        }
+    }
+    public void explotarMina(int f, int c, int team) {
+        JOptionPane.showMessageDialog(null, "¡Pisaste una mina!");
+        miTablero.getCuadrantes()[f][c]= new Libre(f,c);
+        buttons[f][c].setText("");
+        buttons[f][c].setBackground(new Color(187, 178, 178));
+        getEjercito(team).getSoldados().remove(Tablero.toKey(f + 1, c + 1));
+        boton(getLstTeam(team).get(0).getUbicacion()).setForeground(Color.BLACK);
+        for (int i=f-1; i<=f+1; i++){
+            if (i < 0 || i > 9) continue;
+            for (int j=c-1; j<=c+1; j++){
+                if (j < 0 || j > 11) continue;
+                if (i == f && j == c) continue;
+                if (miTablero.getCuadrantes()[i][j] instanceof Libre){
+                    Libre cNum = (Libre) miTablero.getCuadrantes()[i][j];
+                    cNum.disminuirCantidad();
+                    if(getLista().containsKey(Tablero.toKey(i + 1, j + 1))) continue;
+                    if (cNum.getNumero() <= 0) {
+                        buttons[i][j].setText("");
+                        buttons[i][j].setBackground(new Color(187, 178, 178));
+                    }
+                    else {
+                        buttons[i][j].setText(""+miTablero.getCuadrantes()[i][j].getNumero());
+                        buttons[i][j].setBackground(new Color(183, 187, 204));
+                    }
+                }
+            } 
+        }
     }
     public void descubrirNumeros(int f, int c) {
         miTablero.getCuadrantes()[f][c].cambiarEstado();
@@ -274,21 +291,7 @@ public class Game extends JFrame{
                 }
             }
         }           
-    }
-    
-    public void cambiarColor(int f, int c, Color color) {
-        int i= 1;
-        if (turno % 2== 0)
-            i= -1;
-        for(int j= -1; j<= 1; j++) {
-        	if (f + j < 0 || f + j > 9) continue;
-        	String k= Tablero.toKey(f + j + 1, c  + i + 1);
-        	buttons[f + j][c + i].setBackground(color);
-        	if(getLista().containsKey(k) && color.equals(colores[0]))
-        		buttons[f + j][c + i].setBackground(colores[turno % 2 + 1]);
-        }
-    }
-    
+    }   
     public void lucha(String ub1, String ub2) {
         int num= (int)(Math.random() * 2);
         int team1= getLista().get(ub1).getTeam();
@@ -314,7 +317,7 @@ public class Game extends JFrame{
     			&& ejer1.getTorre().enPie() && ejer2.getTorre().enPie());
     }
     
-    //devuelve la lista ordenda segÃƒÆ’Ã‚Âºn el equipo
+    //devuelve la lista ordenda segÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Âºn el equipo
     public ArrayList<Soldado> getLstTeam(int team){
         if (team == 1)
             return ejer1.getLstOrdenada();
