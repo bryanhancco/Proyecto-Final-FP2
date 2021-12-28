@@ -77,10 +77,10 @@ public class Game extends JFrame{
                 for(int c= 0; c< buttons[0].length; c++) {
                     if(e.getSource() == buttons[f][c]) {        	
                         if (hacerMovimiento) {
-                            if (buttons[f][c].getBackground().equals(Color.RED))
+                            //if (buttons[f][c].getBackground().equals(Color.RED))
                         	movimiento(buttons[f][c], f, c);
-                            else
-                        	JOptionPane.showMessageDialog(null, "¡Movimiento Invalido!");
+                            //else
+                        //	JOptionPane.showMessageDialog(null, "¡Movimiento Invalido!");
                             actDatos();
                         }
                         else
@@ -91,15 +91,16 @@ public class Game extends JFrame{
         }
     }
     
-    public void seleccionarSoldado(int f, int c) {
-    	int team= (turno+1)%2 + 1;
-    	Soldado selec= getLista().get(Tablero.toKey(f + 1,c + 1));
-        if(selec != null && getLstTeam(team).get(0) == selec) {	       
-            texto= buttons[f][c].getText();
-	    fAux= f;
-	    cAux= c;
+    public void seleccionarSoldado(int f, int c) {        
+        int team = (turno+1)%2 + 1;
+        Soldado selec= getLista().get(Tablero.toKey(f + 1,c + 1));
+        if(selec != null && getLstTeam(team).get(0) == selec) {	   
+            labels.get("Minas").setText("Minas alrededor: "+miTablero.getCuadrantes()[f][c].getNumero());
+            texto = buttons[f][c].getText();
+	    fAux = f;
+	    cAux = c;
 	    cambiarColor(f,c, Color.RED);
-	    JOptionPane.showMessageDialog(null, "Ã‚Â¡Tiene " + miTablero.getCuadrantes()[f][c].getNumero()+ " minas cerca!");
+	    //JOptionPane.showMessageDialog(null, "¡Tiene " + miTablero.getCuadrantes()[f][c].getNumero()+ " minas cerca!");
 	    hacerMovimiento = true; 
         }
         else
@@ -107,7 +108,8 @@ public class Game extends JFrame{
    }     
     public void addLabel(JPanel t) {					
         t.add(new JLabel("ESTADÍSTICAS", SwingConstants.CENTER));
-	t.add(new JLabel("Terreno: " + datos[0],SwingConstants.CENTER));
+        t.add(getPanel("Minas"));
+	t.add(new JLabel("Terreno: " + datos[0], SwingConstants.CENTER));
 	t.add(getPanel("R1"));
 	t.add(getPanel("R2"));
         t.add(new JLabel("Esta jugando:", SwingConstants.CENTER));
@@ -115,7 +117,7 @@ public class Game extends JFrame{
 	t.add(new JLabel("Soldados Restantes:", SwingConstants.CENTER));
         t.add(getPanel("r1"));
 	t.add(getPanel("r2"));
-        t.add(getPanel("Mensaje"));
+        //t.add(getPanel("Mensaje"));
 	t.add(getPanel("Torre1"));
         t.add(getPanel("Torre2"));
 	JButton bReinicio= new JButton("Reiniciar Juego");
@@ -148,7 +150,7 @@ public class Game extends JFrame{
 
         if(et.equals("R1"))
             p.setBackground(colores[1]);
-        if(et.equals("R2"))
+        else if(et.equals("R2"))
             p.setBackground(colores[2]);
         p.add(l);
 	return p;
@@ -162,7 +164,7 @@ public class Game extends JFrame{
     }
 	
     public void actDatos() {
-        int team= (turno+1)%2 + 1;
+        int team= (turno+1)%2 + 1;    
 	labels.get("Turno").setText(datos[team]);
         turnoPanel.setBackground(colores[team]);
 	labels.get("Turno").setForeground(negativo(colores[team]));
@@ -199,7 +201,7 @@ public class Game extends JFrame{
             explotarMina(f, c, team);
         
         //condicional que recorta atacar a la torre
-        else if (c == 0 || c == 1) {
+        if (c == 0 || c == 11) {
             JOptionPane.showMessageDialog(null, "Torre " + team + " Atacada");
             getEjercito(team).getSoldados().remove(Tablero.toKey(f + 1, c + 1));
             boton(Tablero.toKey(f + 1, c + 1)).setBackground(Color.WHITE);
@@ -269,7 +271,7 @@ public class Game extends JFrame{
                         buttons[i][j].setBackground(new Color(183, 187, 204));
                     }
                 }
-            } 
+            }   
         }
     }
     public void descubrirNumeros(int f, int c) {
@@ -278,7 +280,7 @@ public class Game extends JFrame{
             for (int i=f-1; i<=f+1; i++){
                 if (i < 0 || i > 9) continue;
                 for (int j=c-1; j<=c+1; j++){
-                    if (j < 0 || j > 11) continue;
+                    if (j <= 0 || j >= 11) continue;
                     if(getLista().containsKey(Tablero.toKey(i + 1, j + 1))) continue;
                     if (miTablero.getCuadrantes()[i][j] instanceof Mina || !miTablero.getCuadrantes()[i][j].getEstado()) continue;   
                     if (miTablero.getCuadrantes()[i][j].getNumero() > 0 ) {
