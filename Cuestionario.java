@@ -4,72 +4,96 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
    
-public class Cuestionario extends JFrame {
+public class Cuestionario extends JFrame implements Datos{
     
     private static final int ANCHO = 300;
     private static final int ALTO = 400;
-    private JPanel text1; 
-    private JPanel text2; 
+    private JPanel text1, text2, text3, sup; 
     private JButton enviar;
-    private JComboBox reinoOpc;
+    private JComboBox reinoOpc, color1, color2;
     private JRadioButton azul;
     private JRadioButton rojo;
     private JRadioButton verde;
     private JRadioButton amarillo;
     private boolean enviarDatos = false;
+    JButton mColor, mColor2;
     
     
     public Cuestionario() {
         setTitle("Seleccione su color preferido");
         setSize(ANCHO, ALTO);
-        setLayout(new GridLayout(3, 1));
+        setLayout(new BorderLayout());
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         createContents();    
         setVisible(true);
     }
-   public void createContents() {    
+    
+    public String[] cDisponibles(){
+    	String[] array= new String[COLORES.length - 2];
+    	if(color1 == null && color2== null)
+    		return colores;
+    	int i= 0;
+    	JOptionPane.showMessageDialog(null, "Usando cdispobibles");
+    	for(String c: colores) {
+    		if(!color1.getSelectedItem().equals(c) && !color2.getSelectedItem().equals(c)) {
+    			array[i]= colores[i];
+    			i++;
+    		}
+    	}
+    	return array;
+    }
+    
+   public void createContents() {
+	   sup= new JPanel(new GridLayout(1,2));
        String[] reinos = {"Inglaterra", "Sacro Imperio Romano-Germánico", "Francia", "Castilla - Aragón", "Moros"};     
        
-       text1 = new JPanel(new GridLayout(5, 1));
+       text1 = new JPanel(new GridLayout(2, 1));
        text1.add(new JLabel("Seleccione su color preferido"));
-       ButtonGroup rb = new ButtonGroup();      
-       azul = new JRadioButton("Azul");
-       rb.add(azul);
-       rojo = new JRadioButton("Rojo");
-       rb.add(rojo);
-       verde = new JRadioButton("Verde");
-       rb.add(verde);
-       amarillo = new JRadioButton("Amarillo");
-       rb.add(amarillo);
-       
-       JPanel tex = new JPanel(new FlowLayout(FlowLayout.LEFT));
-       tex.add(azul);
-       tex.add(generarColores(Color.BLUE));
-       text1.add(tex);
-       tex = new JPanel(new FlowLayout(FlowLayout.LEFT));
-       tex.add(rojo);
-       tex.add(generarColores(Color.RED));
-       text1.add(tex);
-       tex = new JPanel(new FlowLayout(FlowLayout.LEFT));
-       tex.add(verde);
-       tex.add(generarColores(Color.GREEN));
-       text1.add(tex);
-       tex = new JPanel(new FlowLayout(FlowLayout.LEFT));
-       tex.add(amarillo);
-       tex.add(generarColores(Color.YELLOW));
-       text1.add(tex);
+       color1= new JComboBox(colores);
+       color1.setSelectedIndex(0);
+       color1.addActionListener(new MColor());
+       mColor= new JButton("");
+       mColor.setBackground(Color.YELLOW);
+       JPanel selecColor= new JPanel(new GridLayout(1, 2));
+       selecColor.add(color1);
+       selecColor.add(mColor);
+       text1.add(selecColor); 
        
        text2 = new JPanel(new GridLayout(2, 1));
+       text2.add(new JLabel("Seleccione su color preferido"));
+       color2= new JComboBox(colores);
+       color2.addActionListener(new MColor());
+       color1.setSelectedIndex(0);
+       mColor2= new JButton("");
+       //CORREGIR COLOR DE INICIO DE LA SEGUNDA LISTA
+       mColor2.setBackground(Color.RED);
+       JPanel selecColor2= new JPanel(new GridLayout(1, 2));
+       selecColor2.add(color2);
+       selecColor2.add(mColor2);
+       text2.add(selecColor2); 
+       
+       text3 = new JPanel(new GridLayout(2, 1));
        reinoOpc = new JComboBox(reinos);
-       text2.add(new JLabel("Seleccione el reino que prefiera"));
-       text2.add(reinoOpc);
+       text3.add(new JLabel("Seleccione el reino que prefiera"));
+       text3.add(reinoOpc);
        
        enviar = new JButton("Submit");
-       add(text1);
-       add(text2);
-       add(enviar);
-       enviar.addActionListener(new Listener());
+       sup.add(text1);
+       sup.add(text2);
+       add(sup, BorderLayout.CENTER);
+       add(enviar, BorderLayout.SOUTH);
+       enviar.addActionListener(new Enviar());
    }
+   
+   private class MColor implements ActionListener {
+       public void actionPerformed(ActionEvent e) {
+    	   if(e.getSource()==color1)
+    		   mColor.setBackground(COLORES[color1.getSelectedIndex()]);
+    	   else
+    		   mColor2.setBackground(COLORES[color2.getSelectedIndex()]);
+       }
+   }
+   
    public Color getColor() {
        if (azul.isSelected()) 
            return Color.BLUE;
@@ -87,12 +111,13 @@ public class Cuestionario extends JFrame {
    public boolean getEstado() {
        return enviarDatos;
    }
-   private class Listener implements ActionListener {
+   private class Enviar implements ActionListener {
        public void actionPerformed(ActionEvent e) {
-           if (azul.isSelected() || rojo.isSelected() || verde.isSelected() || amarillo.isSelected()) {
+           if (color1.getSelectedIndex() != color2.getSelectedIndex()) {
                 JOptionPane.showMessageDialog(null, "Datos Enviados");
                 enviarDatos = true;
-                setVisible(false);                 
+                setVisible(false);
+                new Game();
            }
            else {
                JOptionPane.showMessageDialog(null, "Alguno de esos datos ya ha sido seleccionado, seleccione otro");
@@ -109,3 +134,4 @@ public class Cuestionario extends JFrame {
        new Cuestionario();
    }
 }
+
