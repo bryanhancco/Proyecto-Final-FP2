@@ -1,4 +1,4 @@
-import java.util.*;
+
 public class Tablero {
     private Cuadrante[][] miTablero;
     
@@ -6,17 +6,18 @@ public class Tablero {
         miTablero = new Cuadrante[10][12];
         generarMinas();
         generarLibres();
+        generarEscudos();
     }
     public Cuadrante[][] getCuadrantes(){
         return miTablero;
     }
     
     public void quitarMina(String ub) {
-    	int large = ub.length();
+        int large = ub.length();
         String columna = ub.substring(large - 1);
         int col = columna.compareTo("A");
         int fila = Integer.parseInt(ub.substring(0, ub.length() - 1)) -1;
-        miTablero[fila][col]= new Cuadrante(fila, col);
+        miTablero[fila][col]= new Libre(fila, col);
     }
     
     public Cuadrante getCuadrante(String ub){
@@ -53,7 +54,7 @@ public class Tablero {
             for (int j=0; j<12; j++) {
                 if (miTablero[i][j] == null){
                     //se genera un cuadrante Libre, e inmediatamente se le asigna
-                    //un nÃºmero (si tiene minas alrededor)
+                    //un numero (si tiene minas alrededor)
                     miTablero[i][j] = new Libre(i, j);
                     insertarNumero((Libre) miTablero[i][j]);
                 }
@@ -88,13 +89,12 @@ public class Tablero {
     
     public void generarEscudos() {
         int[][] pos = new int[10][12];
-        int fila;
-        int columna;
+        int fila, columna;
         for (int i=0; i<Libre.cantEscudos; i++){
             do {
                 fila = (int)(Math.random()*10);
-                columna = (int)(Math.random()*12);
-            } while(pos[fila][columna] != 0 && miTablero[fila][columna] instanceof Mina || columna == 0 || columna == 11);
+                columna = (int)(Math.random()*10)+1;
+            } while(pos[fila][columna] != 0 || miTablero[fila][columna] instanceof Mina);
             Libre lib = (Libre) miTablero[fila][columna];
             lib.setEscudo();
         }
@@ -106,9 +106,7 @@ public class Tablero {
     
     public static String toKey(int f, int c) {
 	String letras= "ABCDEFGHIJKL", k;
-	if (c< 1 || c> 12 || f< 1 || f> 10)
-            return "-"; //Si esta fuera del tablero
-	k= f + letras.substring(c-1,c);
+	k = f + letras.substring(c-1,c);
 	return k;
     }
 }
