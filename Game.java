@@ -15,7 +15,7 @@ public class Game extends JFrame implements Datos{
     private String texto = "";
     private JPanel turnoPanel,turnoPanel2, tablero, estadisticas, top;
     private int fAux, cAux, turno = 1;
-    private boolean hacerMovimiento;
+    private boolean hacerMovimiento, hayEscudoCerca;
     private Jugador[] jugadores;
     
     public Game(Color c1, Color c2, String n1, String n2, String r1, String r2) {
@@ -50,7 +50,7 @@ public class Game extends JFrame implements Datos{
         tablero.setPreferredSize(new Dimension(1050, 800));
         estadisticas = new JPanel(new GridLayout(0, 1));
         estadisticas.setPreferredSize(new Dimension(350, 800));   
-        top = new JPanel(new GridLayout(1, 5));
+        top = new JPanel(new GridLayout(1, 0));
         top.setPreferredSize(new Dimension(1050, 50));
         
         //creando los botones del tablero
@@ -79,7 +79,7 @@ public class Game extends JFrame implements Datos{
         
         //añadiendo los elementos a top
         top.add(new JLabel(""));
-        top.add(new JLabel(""));
+        top.add(getPanel("Escudo"));
         top.add(turnoPanel = getPanel("Turno"));
         top.add(getPanel("Minas"));
         top.add(turnoPanel2 = getPanel("Turno2"));
@@ -119,15 +119,18 @@ public class Game extends JFrame implements Datos{
     //permite seleccionar al soldado del ejercito correspondiente
     public void seleccionarSoldado(int f, int c) {        
         int team = (turno + 1) % 2 + 1;
-        jugadores[team-1].aumentarTurno();
+        jugadores[team - 1].aumentarTurno();
         DatosJugadores.actualizarDatos(jugadores[0], jugadores[1]);
         Soldado selec= getLista().get(Tablero.toKey(f + 1, c + 1));
         if(selec != null && getLstTeam(team).get(0) == selec) {	   
-            labels.get("Minas").setText("Minas alrededor: " + miTablero.getCuadrantes()[f][c].getNumero());
+            labels.get("Minas").setText("Minas alrededor: " + miTablero.getCuadrantes()[f][c].getNumero());  
             texto = botonesAccion[f][c].getText();
 	    fAux = f;
 	    cAux = c;
 	    cambiarColor(f, c, Color.RED);
+            if (hayEscudoCerca) 
+                labels.get("Escudo").setText("Hay un escudo cerca");  
+            
 	    hacerMovimiento = true; 
         }
         else
@@ -146,7 +149,7 @@ public class Game extends JFrame implements Datos{
         //t.add(getPanel("Mensaje"));
 	t.add(getPanel("Torre1"));      
         t.add(getPanel("Torre2"));
-        JButton bReinicio= new JButton("Regresar");
+        JButton bReinicio = new JButton("Regresar");
         
 	labels.get("R1").setText(datos[1]);
         labels.get("R2").setText(datos[2]);
@@ -216,13 +219,19 @@ public class Game extends JFrame implements Datos{
     }    
     //cambia la ubicacion del soldado, tanto en el tablero, como en el HashMap
     public void movimiento(JButton b, int f, int c) {
+        hayEscudoCerca = false;
+        labels.get("Escudo").setText("");  
         int team = (turno + 1) % 2 + 1;
         cambiarColor(fAux, cAux, misColores[0]);
-        if (miTablero.getCuadrantes()[f][c] instanceof Libre) {         
+        if (miTablero.getCuadrantes()[f][c] instanceof Libre) {    
             if(getLista().containsKey(Tablero.toKey(f + 1, c + 1)))              
                 lucha(Tablero.toKey(fAux + 1, cAux + 1), Tablero.toKey(f + 1, c + 1));            
-            else {
+            else {                
                 accionMovimiento(f, c, team);
+                if (miTablero.getCuadrantes()[f][c].tieneEscudo()) {
+                    getLista().get(Tablero.toKey(f +1 , c + 1)).setEscudo();
+                    JOptionPane.showMessageDialog(null, "¡Su soldado tiene un escudo!");
+                } 
                 descubrirNumeros(f, c);    
             }
         }
@@ -268,6 +277,9 @@ public class Game extends JFrame implements Datos{
         for(int j= -1; j<= 1; j++) {
             if (f + j < 0 || f + j > 9) continue;
             String k = Tablero.toKey(f + j + 1, c  + i + 1);
+            if (miTablero.getCuadrantes()[f + j][c + i].tieneEscudo()) {
+                hayEscudoCerca = true;
+            }
             botonesAccion[f + j][c + i].setBackground(color);
             if(!botonesAccion[f + j][c + i].getText().equals("") && hacerMovimiento)
                 botonesAccion[f + j][c + i].setBackground(new Color(183, 187, 204));
@@ -278,30 +290,34 @@ public class Game extends JFrame implements Datos{
     //metodo elimina al jugador y "esclarece" las posiciones circundantes
     public void explotarMina(int f, int c, int team) {
         JOptionPane.showMessageDialog(null, "¡Pisaste una mina!");
-        miTablero.getCuadrantes()[f][c]= new Libre(f, c);
-        botonesAccion[f][c].setText("");
-        botonesAccion[f][c].setBackground(new Color(187, 178, 178));
-        getEjercito(team).getSoldados().remove(Tablero.toKey(f + 1, c + 1));
-        boton(getLstTeam(team).get(0).getUbicacion()).setForeground(negativo(misColores[team]));
-        for (int i = f - 1; i <= f + 1; i++){
-            if (i < 0 || i > 9) continue;
-            for (int j = c - 1; j <= c + 1; j++){
-                if (j < 0 || j > 11) continue;
-                if (i == f && j == c) continue;
-                if (miTablero.getCuadrantes()[i][j] instanceof Libre){
-                    Libre cNum = (Libre) miTablero.getCuadrantes()[i][j];
-                    cNum.disminuirCantidad();
-                    if(getLista().containsKey(Tablero.toKey(i + 1, j + 1))) continue;
-                    if (cNum.getNumero() <= 0) {
-                        botonesAccion[i][j].setText("");
-                        botonesAccion[i][j].setBackground(new Color(187, 178, 178));
+        miTablero.getCuadrantes()[f][c] = new Libre(f, c);
+        if (getLista().get(Tablero.toKey(f + 1, c + 1)).tieneEscudo()) 
+            JOptionPane.showMessageDialog(null, "Ha perdido su escudo");      
+        else {          
+            botonesAccion[f][c].setText("");
+            botonesAccion[f][c].setBackground(new Color(187, 178, 178));
+            getEjercito(team).getSoldados().remove(Tablero.toKey(f + 1, c + 1));
+            boton(getLstTeam(team).get(0).getUbicacion()).setForeground(negativo(misColores[team]));
+            for (int i = f - 1; i <= f + 1; i++){
+                if (i < 0 || i > 9) continue;
+                for (int j = c - 1; j <= c + 1; j++){
+                    if (j < 0 || j > 11) continue;
+                    if (i == f && j == c) continue;
+                    if (miTablero.getCuadrantes()[i][j] instanceof Libre){
+                        Libre cNum = (Libre) miTablero.getCuadrantes()[i][j];
+                        cNum.disminuirCantidad();
+                        if(getLista().containsKey(Tablero.toKey(i + 1, j + 1))) continue;
+                        if (cNum.getNumero() <= 0) {
+                            botonesAccion[i][j].setText("");
+                            botonesAccion[i][j].setBackground(new Color(187, 178, 178));
+                        }
+                        else {
+                            botonesAccion[i][j].setText(""+miTablero.getCuadrantes()[i][j].getNumero());
+                            botonesAccion[i][j].setBackground(new Color(183, 187, 204));
+                        }
                     }
-                    else {
-                        botonesAccion[i][j].setText(""+miTablero.getCuadrantes()[i][j].getNumero());
-                        botonesAccion[i][j].setBackground(new Color(183, 187, 204));
-                    }
-                }
-            }   
+                }   
+            }
         }
     }    
     //descubre los numeros que se ubican alrededor de una mina
@@ -311,7 +327,9 @@ public class Game extends JFrame implements Datos{
             for (int i = f - 1; i <= f + 1; i++){
                 if (i < 0 || i > 9) continue;
                 for (int j = c - 1; j <= c + 1; j++){
-                    if (j <= 0 || j >= 11) continue;                   
+                    if (j <= 0 || j >= 11) continue;   
+                    if (miTablero.getCuadrantes()[i][j].tieneEscudo())
+                        hayEscudoCerca = true;
                     if(getLista().containsKey(Tablero.toKey(i + 1, j + 1))) continue;
                     if (miTablero.getCuadrantes()[i][j] instanceof Mina || !miTablero.getCuadrantes()[i][j].getEstado()) continue;   
                     if (miTablero.getCuadrantes()[i][j].getNumero() > 0 ) {
@@ -325,32 +343,28 @@ public class Game extends JFrame implements Datos{
             }
         }
         else {
-            if(cAux != 0 && cAux != 11) {
-                if (miTablero.getCuadrantes()[fAux][cAux].getNumero() > 0) {
-                    botonesAccion[fAux][cAux].setText(""+miTablero.getCuadrantes()[fAux][cAux].getNumero());     
-                    miTablero.getCuadrantes()[fAux][cAux].cambiarEstado();
-                    botonesAccion[fAux][cAux].setBackground(new Color(183, 187, 204));  
-                }                
+            if ((cAux != 0 && cAux != 11)) {
+                botonesAccion[fAux][cAux].setText(""+miTablero.getCuadrantes()[fAux][cAux].getNumero());     
+                miTablero.getCuadrantes()[fAux][cAux].cambiarEstado();
+                botonesAccion[fAux][cAux].setBackground(new Color(183, 187, 204));      
             }
         }
     }   
     //elimina al soldado que pierda tras una lucha
     public void lucha(String ub1, String ub2) {
         int num = (int)(Math.random() * 2);
-        JOptionPane.showMessageDialog(null, getLista().get(ub1).getNombre());
-        JOptionPane.showMessageDialog(null, getLista().get(ub2).getNombre());
         int team1 = getLista().get(ub1).getTeam();
         int team2 = getLista().get(ub2).getTeam();
-        if (num == 1) {
-            JOptionPane.showMessageDialog(null, "Gana " + getLista().get(ub1).getNombre());
+        if (num == 0) {
+            jugadores[1].eliminarSoldado();
             getEjercito(team2).retirarSoldado(ub2);
             getEjercito(team1).moverSoldado(ub1, ub2);
             boton(ub2).setText(boton(ub1).getText());
             boton(ub2).setBackground(boton(ub1).getBackground());
         }
         else {
-            JOptionPane.showMessageDialog(null, "Gana " + getLista().get(ub2).getNombre());
-            getEjercito(team1).retirarSoldado(ub1);
+            jugadores[0].eliminarSoldado();
+            getEjercito(team1).retirarSoldado(ub1); 
         }
         boton(ub1).setText("");
         boton(ub1).setBackground(misColores[0]);
