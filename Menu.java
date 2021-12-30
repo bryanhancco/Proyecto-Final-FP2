@@ -15,7 +15,7 @@ public class Menu extends JFrame {
     private JButton guia;
     private JButton regresar;
     private JTextArea textGuia;
-    private boolean viendoPuntajes = false;
+    private boolean viendoPuntajes;
     private Jugador jug1, jug2;
     
     public Menu() {
@@ -27,6 +27,7 @@ public class Menu extends JFrame {
         setVisible(true);
     }      
     public void createContents() {
+        d = new DatosJugadores();
         botonesCentro = new JPanel(new GridLayout(4, 1));
         iniciarJuego = new JButton("Nuevo Juego");
         continuarJuego = new JButton("Continuar Juego");
@@ -60,24 +61,37 @@ public class Menu extends JFrame {
     private class OpcionesPrincipales implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             botonesCentro.setVisible(false);
+            viendoPuntajes = false;
             if (e.getSource() == iniciarJuego) {
                 setVisible(false);
                 new Cuestionario();
             }
             else if (e.getSource() == continuarJuego) {
-                
-            }
-            else if (e.getSource() == puntajes) {
                 //jug1 = d.obtenerDatosJugador()[0];
                 //jug2 = d.obtenerDatosJugador()[1];
-                estadisticas = new JPanel(new GridLayout(3, 5));
-                estadisticas.add(new JLabel("Nombre del jugador"));
-                estadisticas.add(new JLabel(""));
-                estadisticas.add(new JLabel(""));
-                estadisticas.add(new JLabel("Nombre del reino"));
-                estadisticas.add(new JLabel("Ha Ganado"));
-                estadisticas.add(new JLabel("Turnos efectuados"));
+            }
+            else if (e.getSource() == puntajes) {
+                viendoPuntajes = true;
+                jug1 = DatosJugadores.obtenerDatosJugador()[0];
+                jug2 = DatosJugadores.obtenerDatosJugador()[1];
+                estadisticas = new JPanel(new GridLayout(0, 5));
+                estadisticas.add(new JLabel("Nombre del jugador"));              
+                estadisticas.add(new JLabel("Nombre del reino"));               
+                estadisticas.add(new JLabel("Ha Ganado"));                
+                estadisticas.add(new JLabel("Turnos realizados"));              
                 estadisticas.add(new JLabel("Soldados muertos"));
+                //Datos del jugador 1
+                estadisticas.add(new JLabel(jug1.getNombre()));
+                estadisticas.add(new JLabel(jug1.getReino()));
+                estadisticas.add(new JLabel(""+jug1.getEstado()));
+                estadisticas.add(new JLabel(""));
+                estadisticas.add(new JLabel(""));
+                //Datos del jugador 1
+                estadisticas.add(new JLabel(jug2.getNombre()));
+                estadisticas.add(new JLabel(jug2.getReino()));
+                estadisticas.add(new JLabel(""+jug2.getEstado()));
+                estadisticas.add(new JLabel(""));
+                estadisticas.add(new JLabel(""));
                 
                 add(estadisticas, BorderLayout.CENTER);
                 add(regresar, BorderLayout.SOUTH);
@@ -88,7 +102,7 @@ public class Menu extends JFrame {
                 add(textGuia, BorderLayout.CENTER);
                 add(regresar, BorderLayout.SOUTH);
                 textGuia.setVisible(true);                
-                regresar.setVisible(true);
+                regresar.setVisible(true);              
             }
         }
     }
@@ -104,6 +118,10 @@ public class Menu extends JFrame {
     }
     public static void main(String args[]) {
         new Menu();
+    }
+    public void obtenerDatos() {
+        jug1 = d.obtenerDatosJugador()[0];
+        jug2 = d.obtenerDatosJugador()[1];
     }
 }
 
