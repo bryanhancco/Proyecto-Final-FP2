@@ -38,7 +38,7 @@ public class Menu extends JFrame {
         textGuia = new JTextArea(
                 "Sea por la modalidad que sea, el objetivo del jugador\n"+
                 "es el de destruir la torre de su enemigo, de manera que\n"+
-                "tendrá que seleccionar la posicion a la que desea moverse.\n\n"+
+                "tendrÃ¡ que seleccionar la posicion a la que desea moverse.\n\n"+
                 "Si pisa una mina morira.\n\n"+
                 "Si llega a la torre, su soldado morira, pero disminuira la\n"+
                 "vida de la torre.\n\n"+
@@ -59,8 +59,7 @@ public class Menu extends JFrame {
        // JPanel centro= new JPanel(new BorderLayout());
         //centro.setIconImagen(imagen);
         JLabel imagen= new JLabel();
-        //imagen.setIcon(new ImageIcon("C:\\Users\\elmer\\Downloads\\descarga.jpg"));
-        imagen.setIcon(new ImageIcon("\\Proyecto-Final-FP2\\descarga.jpg"));
+        imagen.setIcon(new ImageIcon("Media/descarga.jpg"));
         add(imagen, BorderLayout.CENTER);
         add(botonesCentro, BorderLayout.SOUTH);
       
@@ -130,5 +129,4 @@ public class Menu extends JFrame {
         new Menu();
     }
 }
-
 
