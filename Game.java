@@ -19,7 +19,7 @@ public class Game extends JFrame{
     private int fAux, cAux, turno = 1;
     private boolean hacerMovimiento;
     
-    public Game() {
+    public Game(Color c1, Color c2) {
         miTablero = new Tablero();
         ejer1 = new Ejercito(1, 1);
         ejer2 = new Ejercito(12, 2);
@@ -32,8 +32,8 @@ public class Game extends JFrame{
 	estadisticas= new JPanel(new GridLayout(13,1));
 	estadisticas.setPreferredSize(new Dimension(350,800));
         colores[0]= new Color(187, 178, 178);
-        colores[1]= new Color(206,54,45);
-        colores[2]= new Color(80,200,60);
+        colores[1]= c1;
+        colores[2]= c2;
         addLabel(estadisticas);
         createContents();        
         setVisible(true);
@@ -61,26 +61,17 @@ public class Game extends JFrame{
         add(tablero, BorderLayout.CENTER);
         add(estadisticas, BorderLayout.WEST);
    }
-   
-   public void Mensaje() {
-       JOptionPane.showMessageDialog(null, "Soldados restantes en el Ejercito Nro1: " + getLstTeam(1).size()
-			+ "\nVida de la Torre 1: " + getEjercito(1).getTorre().getVidaTorre()
-			+ "\nSoldados restantes en el Ejercito Nro2: " + getLstTeam(2).size()
-			+ "\nVida de la Torre 2: " + getEjercito(2).getTorre().getVidaTorre()
-			+ "\nTURNO DEL JUGADOR NÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â° 1" 
-			+ "\n" + getLstTeam(1).get(0).getNombre());
-   }
-   
+
     private class Acciones implements ActionListener {
         public void actionPerformed(ActionEvent e) {              
             for (int f= 0; f< buttons.length; f++) {
                 for(int c= 0; c< buttons[0].length; c++) {
                     if(e.getSource() == buttons[f][c]) {        	
                         if (hacerMovimiento) {
-                            //if (buttons[f][c].getBackground().equals(Color.RED))
+                            if (buttons[f][c].getBackground().equals(Color.RED))
                         	movimiento(buttons[f][c], f, c);
-                            //else
-                        //	JOptionPane.showMessageDialog(null, "¡Movimiento Invalido!");
+                            else
+                                JOptionPane.showMessageDialog(null, "¡Movimiento Invalido!");
                             actDatos();
                         }
                         else
@@ -99,8 +90,7 @@ public class Game extends JFrame{
             texto = buttons[f][c].getText();
 	    fAux = f;
 	    cAux = c;
-	    cambiarColor(f,c, Color.RED);
-	    //JOptionPane.showMessageDialog(null, "¡Tiene " + miTablero.getCuadrantes()[f][c].getNumero()+ " minas cerca!");
+	    cambiarColor(f, c, Color.RED);
 	    hacerMovimiento = true; 
         }
         else
@@ -152,6 +142,7 @@ public class Game extends JFrame{
             p.setBackground(colores[1]);
         else if(et.equals("R2"))
             p.setBackground(colores[2]);
+        
         p.add(l);
 	return p;
     }
@@ -200,7 +191,7 @@ public class Game extends JFrame{
         else if (miTablero.getCuadrantes()[f][c] instanceof Mina) 
             explotarMina(f, c, team);
         
-        //condicional que recorta atacar a la torre
+
         if (c == 0 || c == 11) {
             JOptionPane.showMessageDialog(null, "Torre " + team + " Atacada");
             getEjercito(team).getSoldados().remove(Tablero.toKey(f + 1, c + 1));
@@ -208,29 +199,8 @@ public class Game extends JFrame{
             boton(Tablero.toKey(f + 1, c + 1)).setText("");
             getEjercito(team).getTorre().torreAtacada();
             if (getEjercito(team).getTorre().getVidaTorre() == 0)
-            	getEjercito(team).getTorre().torreDestruida();
+                getEjercito(team).getTorre().torreDestruida();
         }
-        /*
-        else if(c == 11 && turno % 2 != 0) {
-            JOptionPane.showMessageDialog(null, "Torre 2 Atacada");
-            getEjercito(team).getSoldados().remove(Tablero.toKey(f + 1, c + 1));
-            boton(Tablero.toKey(f + 1, c + 1)).setBackground(Color.WHITE);
-            boton(Tablero.toKey(f + 1, c + 1)).setText("");
-            getEjercito(2).getTorre().torreAtacada();
-            if (getEjercito(2).getTorre().getVidaTorre() == 0)
-            	getEjercito(2).getTorre().torreDestruida();
-        }
-        else if(c == 0 && turno % 2 == 0) {
-            JOptionPane.showMessageDialog(null, "Torre 1 Atacada");
-            getEjercito(team).getSoldados().remove(Tablero.toKey(f + 1, c + 1));            
-            boton(Tablero.toKey(f + 1, c + 1)).setBackground(Color.WHITE);
-            boton(Tablero.toKey(f + 1, c + 1)).setText("");
-            getEjercito(1).getTorre().torreAtacada();
-            if (getEjercito(1).getTorre().getVidaTorre() == 0)
-            	getEjercito(1).getTorre().torreDestruida();
-        }
-        */
-        Mensaje();
         turno++;
         hacerMovimiento = false;        
     }
