@@ -1,4 +1,3 @@
-import javax.swing.JOptionPane;
 
 public class Torre {
     private int vidaTorre;
@@ -10,16 +9,12 @@ public class Torre {
     }
     public void torreAtacada() {
         vidaTorre--;
-    }
-    
-    public void torreDestruida() {
-        JOptionPane.showMessageDialog(null, "---> La torre ha sido destruida ");
-        torreEnPie = false;
+        if (vidaTorre == 0 )
+            torreEnPie = false;       
     }
     public int getVidaTorre() {
         return vidaTorre;
-    }
-    
+    }   
     public boolean enPie() {
     	return torreEnPie;
     }
