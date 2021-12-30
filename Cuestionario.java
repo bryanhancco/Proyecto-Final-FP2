@@ -6,7 +6,7 @@ import java.util.*;
 public class Cuestionario extends JFrame implements Datos{    
     private static final int ANCHO = 500;
     private static final int ALTO = 400;
-    private JPanel text1, text2, text3, sup, seccionI, seccionD; 
+    private JPanel seccionI, seccionD; 
     private JButton enviar;
     private JComboBox reinoOpc, color1, color2;
     private JRadioButton azul;
@@ -32,7 +32,7 @@ public class Cuestionario extends JFrame implements Datos{
         if(color1 == null && color2== null)
             return colores;
         int i= 0;
-        JOptionPane.showMessageDialog(null, "Usando cdispobibles");
+        JOptionPane.showMessageDialog(null, "Usando cdisponibles");
         for(String c: colores) {
             if(!color1.getSelectedItem().equals(c) && !color2.getSelectedItem().equals(c)) {
                 array[i]= colores[i];
@@ -43,8 +43,7 @@ public class Cuestionario extends JFrame implements Datos{
     }
     
     public void createContents() {
-        
-        sup= new JPanel(new GridLayout(1,2)); 
+        //sup= new JPanel(new GridLayout(1,2)); 
 
         seccionI = new JPanel(new GridLayout(6, 1));
         seccionI.add(new JLabel("Ingrese su nombre de usuario"));
@@ -67,7 +66,6 @@ public class Cuestionario extends JFrame implements Datos{
         seccionD.add(nombre2 = new JTextField(10));
         seccionD.add(new JLabel("Ingrese el nombre de su reino"));
         seccionD.add(reino2 = new JTextField(10));
-        text2 = new JPanel(new GridLayout(2, 1));
         seccionD.add(new JLabel("Seleccione su color preferido"));
         color2= new JComboBox(colores);
         color2.addActionListener(new MColor());
@@ -79,7 +77,7 @@ public class Cuestionario extends JFrame implements Datos{
         selecColor2.add(mColor2);
         seccionD.add(selecColor2);
 
-        enviar = new JButton("Submit");
+        enviar = new JButton("Enviar");
         //sup.add(text1);
         //sup.add(text2);
         //add(sup, BorderLayout.CENTER);
@@ -119,16 +117,23 @@ public class Cuestionario extends JFrame implements Datos{
         public void actionPerformed(ActionEvent e) {
             int ind1 = color1.getSelectedIndex();
             int ind2 = color2.getSelectedIndex();
-            if (ind1 != ind2) {
+            boolean condicion = (!(nombre1.getText().equals("")) && !(nombre2.getText().equals("")) && !(reino1.getText().equals("")) && !(reino2.getText().equals("")));
+            if ((ind1 != ind2) && condicion) {
                 JOptionPane.showMessageDialog(null, "Datos Enviados");
                 enviarDatos = true;
+                jug1 = new Jugador(COLORES[ind2], nombre1.getText(), reino1.getText());
+                jug2 = new Jugador(COLORES[ind1], nombre2.getText(), reino2.getText());
+                DatosJugadores.actualizarDatos(jug1, jug2);
                 setVisible(false);
                 new Game(COLORES[ind2], COLORES[ind1]);
             }
-            else {
-                JOptionPane.showMessageDialog(null, "Alguno de esos datos ya ha sido seleccionado, seleccione otro");
-            }
+            else 
+                JOptionPane.showMessageDialog(null, "Ingrese y/o seleccione datos correctos");
+            
         }
+    }
+    public void ingresarJugadores(String nJ, String nR, Color c) {
+        Jugador jug = new Jugador(c, nJ, nR);
     }
     public JTextField generarColores(Color c) {
         JTextField color = new JTextField(3);
@@ -140,3 +145,4 @@ public class Cuestionario extends JFrame implements Datos{
         new Cuestionario();
     }
 }
+
