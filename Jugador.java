@@ -16,6 +16,21 @@ public class Jugador implements Serializable {
         nombreReino = nombreR;
         turnosUtilizados = 0;
     }
+    public String getNombre() {
+        return nombreJugador;
+    }
+    public String getReino() {
+        return nombreReino;
+    }
+    public Color getColor() {
+        return colorEscogido;
+    }
+    public boolean getEstado() {
+        return haGanado;
+    }
+    public int cantTurnos() {
+        return turnosUtilizados;
+    }
     public void eliminarJugador() {
         ubicaciones.remove(0);
     }
