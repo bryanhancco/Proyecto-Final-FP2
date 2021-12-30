@@ -4,7 +4,7 @@ import java.awt.event.*;
 import java.util.*;
    
 public class Cuestionario extends JFrame implements Datos{    
-    private static final int ANCHO = 500;
+    private static final int ANCHO = 600;
     private static final int ALTO = 400;
     private JPanel seccionI, seccionD; 
     private JButton enviar;
@@ -39,7 +39,8 @@ public class Cuestionario extends JFrame implements Datos{
     
     public void createContents() {
 
-        seccionI = new JPanel(new GridLayout(6, 1));
+        seccionI = new JPanel(new GridLayout(12, 1));
+        seccionI.add(new JLabel(" "));
         seccionI.add(new JLabel("Ingrese su nombre de usuario"));
         seccionI.add(nombre1 = new JTextField(10));
         seccionI.add(new JLabel("Ingrese el nombre de su reino"));
@@ -55,8 +56,9 @@ public class Cuestionario extends JFrame implements Datos{
         selecColor.add(mColor);
         seccionI.add(selecColor); 
         
-        seccionD = new JPanel(new GridLayout(6, 1));
-        seccionD.add(new JLabel("Ingrese su nombre de usuario"));
+        seccionD = new JPanel(new GridLayout(12, 1));
+        seccionD.add(new JLabel(" "));
+        seccionD.add(new JLabel("Ingrese su nombre de usuario", SwingConstants.CENTER));
         seccionD.add(nombre2 = new JTextField(10));
         seccionD.add(new JLabel("Ingrese el nombre de su reino"));
         seccionD.add(reino2 = new JTextField(10));
@@ -72,9 +74,25 @@ public class Cuestionario extends JFrame implements Datos{
         seccionD.add(selecColor2);
 
         enviar = new JButton("Enviar");
-        add(seccionI, BorderLayout.EAST);
-        add(seccionD, BorderLayout.WEST);
-        add(enviar, BorderLayout.SOUTH);
+        JPanel sup= new JPanel(new GridLayout(1,3));
+        JPanel inf= new JPanel(new GridLayout(3,3));
+        for(int i= 1; i<= 4; i++)
+        	inf.add(new JLabel(""));
+        inf.add(enviar);
+        for(int i= 1; i<= 4; i++)
+        	inf.add(new JLabel(""));
+        JLabel espacio= new JLabel(" ");
+        espacio.setPreferredSize(new Dimension(15,20));
+        sup.add(seccionI);
+        sup.add(espacio);
+        sup.add(seccionD);
+        JPanel titulo= new JPanel();
+        titulo.add(new JLabel("INGRESE DATOS DE LOS JUGADORES"));
+        add(titulo,BorderLayout.NORTH);
+        add(sup,BorderLayout.CENTER);
+        add(new JLabel("     "),BorderLayout.WEST);
+        add(new JLabel("     "),BorderLayout.EAST);
+        add(inf, BorderLayout.SOUTH);
         enviar.addActionListener(new Enviar());
     }
    

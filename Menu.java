@@ -56,7 +56,12 @@ public class Menu extends JFrame {
         guia.addActionListener(new OpcionesPrincipales());
         regresar.addActionListener(new Regresar());
         botonesCentro.setPreferredSize(new Dimension(ANCHO, 150));
-        add(new JLabel("IMAGEN", SwingConstants.CENTER));
+       // JPanel centro= new JPanel(new BorderLayout());
+        //centro.setIconImagen(imagen);
+        JLabel imagen= new JLabel();
+        //imagen.setIcon(new ImageIcon("C:\\Users\\elmer\\Downloads\\descarga.jpg"));
+        imagen.setIcon(new ImageIcon("\\Proyecto-Final-FP2\\descarga.jpg"));
+        add(imagen, BorderLayout.CENTER);
         add(botonesCentro, BorderLayout.SOUTH);
       
     }
