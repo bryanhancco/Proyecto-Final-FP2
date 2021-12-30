@@ -47,18 +47,20 @@ public class Tablero {
             miTablero[fila][columna] = new Mina(fila, columna);
         }
     }
+    
     public void generarLibres() {
         for (int i=0; i<10; i++) {
             for (int j=0; j<12; j++) {
                 if (miTablero[i][j] == null){
                     //se genera un cuadrante Libre, e inmediatamente se le asigna
-                    //un número (si tiene minas alrededor)
+                    //un nÃºmero (si tiene minas alrededor)
                     miTablero[i][j] = new Libre(i, j);
                     insertarNumero((Libre) miTablero[i][j]);
                 }
             }
         }
     }
+    
     public void insertarNumero(Libre cuadrante) {
         int fil = cuadrante.getFila();
         int col = cuadrante.getColumna();
@@ -83,6 +85,7 @@ public class Tablero {
             cuadrante.setNumero(cantidadMinas);
         }
     }
+    
     public void generarEscudos() {
         int[][] pos = new int[10][12];
         int fila;
@@ -96,6 +99,7 @@ public class Tablero {
             lib.setEscudo();
         }
     }
+    
     public static String toKey(int f, String c) {
     	return f + c;
     }
