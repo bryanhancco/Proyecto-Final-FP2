@@ -5,8 +5,8 @@ import java.util.*;
 import java.io.*;
 
 public class Menu extends JFrame {
-    private static final int ANCHO = 800;
-    private static final int ALTO = 600;
+    private static final int ANCHO = 1300;
+    private static final int ALTO = 700;
     private JPanel botonesCentro, estadisticas;
     private JButton iniciarJuego;
     private DatosJugadores d;
@@ -25,10 +25,11 @@ public class Menu extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         createContents();    
         setVisible(true);
-    }      
+    } 
+    
     public void createContents() {
         d = new DatosJugadores();
-        botonesCentro = new JPanel(new GridLayout(4, 1));
+        botonesCentro = new JPanel(new GridLayout(2, 2));
         iniciarJuego = new JButton("Nuevo Juego");
         continuarJuego = new JButton("Continuar Juego");
         puntajes = new JButton("Ver Puntajes");
@@ -54,10 +55,12 @@ public class Menu extends JFrame {
         puntajes.addActionListener(new OpcionesPrincipales());
         guia.addActionListener(new OpcionesPrincipales());
         regresar.addActionListener(new Regresar());
-        
-        add(botonesCentro, BorderLayout.CENTER);
+        botonesCentro.setPreferredSize(new Dimension(ANCHO, 150));
+        add(new JLabel("IMAGEN", SwingConstants.CENTER));
+        add(botonesCentro, BorderLayout.SOUTH);
       
     }
+    
     private class OpcionesPrincipales implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             botonesCentro.setVisible(false);
@@ -106,6 +109,7 @@ public class Menu extends JFrame {
             }
         }
     }
+    
     private class Regresar implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             if (viendoPuntajes) 
@@ -116,6 +120,7 @@ public class Menu extends JFrame {
             botonesCentro.setVisible(true);
         }
     }
+    
     public static void main(String args[]) {
         new Menu();
     }

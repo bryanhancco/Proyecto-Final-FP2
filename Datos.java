@@ -8,4 +8,11 @@ interface Datos {
 			, Color.MAGENTA, Color.PINK, Color.ORANGE};
 	final String[] colores= {"Amarrillo", "Rojo", "Green", "Blue"
 			, "Magenta", "Rosa", "Naranja"};
+	String[] consejos= {"Observa indicador de número" + "\nde minas antes de mover",
+			"",
+			"",
+			"",
+			"",
+			"",
+			""};
 }
