@@ -9,14 +9,9 @@ public class Cuestionario extends JFrame implements Datos{
     private JPanel seccionI, seccionD; 
     private JButton enviar;
     private JComboBox reinoOpc, color1, color2;
-    private JRadioButton azul;
-    private JRadioButton rojo;
-    private JRadioButton verde;
-    private JRadioButton amarillo;
     private JTextField nombre1, nombre2, reino1, reino2;
     private boolean enviarDatos = false;
     JButton mColor, mColor2;
-    private Jugador jug1, jug2;
     
     public Cuestionario() {
         setTitle("Seleccione su color preferido");
@@ -43,7 +38,6 @@ public class Cuestionario extends JFrame implements Datos{
     }
     
     public void createContents() {
-        //sup= new JPanel(new GridLayout(1,2)); 
 
         seccionI = new JPanel(new GridLayout(6, 1));
         seccionI.add(new JLabel("Ingrese su nombre de usuario"));
@@ -78,9 +72,6 @@ public class Cuestionario extends JFrame implements Datos{
         seccionD.add(selecColor2);
 
         enviar = new JButton("Enviar");
-        //sup.add(text1);
-        //sup.add(text2);
-        //add(sup, BorderLayout.CENTER);
         add(seccionI, BorderLayout.EAST);
         add(seccionD, BorderLayout.WEST);
         add(enviar, BorderLayout.SOUTH);
@@ -95,18 +86,6 @@ public class Cuestionario extends JFrame implements Datos{
                 mColor2.setBackground(COLORES[color2.getSelectedIndex()]);
         }
     }
-
-    public Color getColor() {
-        if (azul.isSelected()) 
-            return Color.BLUE;
-        else if (rojo.isSelected()) 
-            return Color.RED;
-        else if (verde.isSelected()) 
-            return Color.GREEN;
-        else if (amarillo.isSelected()) 
-            return Color.YELLOW;
-        return Color.BLACK;
-    }
     public String getReino() {
         return reinoOpc.getSelectedItem().toString();
     }
@@ -120,20 +99,13 @@ public class Cuestionario extends JFrame implements Datos{
             boolean condicion = (!(nombre1.getText().equals("")) && !(nombre2.getText().equals("")) && !(reino1.getText().equals("")) && !(reino2.getText().equals("")));
             if ((ind1 != ind2) && condicion) {
                 JOptionPane.showMessageDialog(null, "Datos Enviados");
-                enviarDatos = true;
-                jug1 = new Jugador(COLORES[ind2], nombre1.getText(), reino1.getText());
-                jug2 = new Jugador(COLORES[ind1], nombre2.getText(), reino2.getText());
-                DatosJugadores.actualizarDatos(jug1, jug2);
+                enviarDatos = true;             
                 setVisible(false);
-                new Game(COLORES[ind2], COLORES[ind1]);
+                new Game(COLORES[ind2], COLORES[ind1], nombre1.getText(), nombre2.getText(), reino1.getText(), reino2.getText());
             }
             else 
-                JOptionPane.showMessageDialog(null, "Ingrese y/o seleccione datos correctos");
-            
+                JOptionPane.showMessageDialog(null, "Ingrese y/o seleccione datos correctos");           
         }
-    }
-    public void ingresarJugadores(String nJ, String nR, Color c) {
-        Jugador jug = new Jugador(c, nJ, nR);
     }
     public JTextField generarColores(Color c) {
         JTextField color = new JTextField(3);
