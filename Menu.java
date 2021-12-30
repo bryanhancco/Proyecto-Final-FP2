@@ -84,13 +84,13 @@ public class Menu extends JFrame {
                 estadisticas.add(new JLabel(jug1.getNombre()));
                 estadisticas.add(new JLabel(jug1.getReino()));
                 estadisticas.add(new JLabel(""+jug1.getEstado()));
+                estadisticas.add(new JLabel(""+jug1.cantTurnos()));
                 estadisticas.add(new JLabel(""));
-                estadisticas.add(new JLabel(""));
-                //Datos del jugador 1
+                //Datos del jugador 2
                 estadisticas.add(new JLabel(jug2.getNombre()));
                 estadisticas.add(new JLabel(jug2.getReino()));
                 estadisticas.add(new JLabel(""+jug2.getEstado()));
-                estadisticas.add(new JLabel(""));
+                estadisticas.add(new JLabel(""+jug2.cantTurnos()));
                 estadisticas.add(new JLabel(""));
                 
                 add(estadisticas, BorderLayout.CENTER);
@@ -119,9 +119,6 @@ public class Menu extends JFrame {
     public static void main(String args[]) {
         new Menu();
     }
-    public void obtenerDatos() {
-        jug1 = d.obtenerDatosJugador()[0];
-        jug2 = d.obtenerDatosJugador()[1];
-    }
 }
+
 
