@@ -1,4 +1,4 @@
-
+import java.util.*;
 import java.io.*;
 public class DatosJugadores { 
     public static void actualizarDatos(Jugador j1, Jugador j2){
@@ -13,6 +13,17 @@ public class DatosJugadores {
             System.out.println("Error: " + e.getMessage());
         }
     }   
+    public static void guardarPartida(Game miJuego) {
+        ObjectOutputStream fileOut;
+        try {
+            fileOut = new ObjectOutputStream(new FileOutputStream("continuarPartida.dat")); 
+            fileOut.writeObject(miJuego);
+            fileOut.close();
+        } 
+        catch (IOException e) { 
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
     public static Jugador[] obtenerDatosJugador () {
         Jugador[] jugadores = new Jugador[2];
         ObjectInputStream fileIn;
