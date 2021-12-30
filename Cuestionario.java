@@ -8,7 +8,7 @@ public class Cuestionario extends JFrame implements Datos{
     private static final int ALTO = 400;
     private JPanel seccionI, seccionD; 
     private JButton enviar;
-    private JComboBox reinoOpc, color1, color2;
+    private JComboBox reinoOpc, color1, color2, modo;
     private JTextField nombre1, nombre2, reino1, reino2;
     private boolean enviarDatos = false;
     JButton mColor, mColor2;
@@ -39,7 +39,7 @@ public class Cuestionario extends JFrame implements Datos{
     
     public void createContents() {
 
-        seccionI = new JPanel(new GridLayout(12, 1));
+        seccionI = new JPanel(new GridLayout(9, 1));
         seccionI.add(new JLabel(" "));
         seccionI.add(new JLabel("Ingrese su nombre de usuario"));
         seccionI.add(nombre1 = new JTextField(10));
@@ -56,7 +56,7 @@ public class Cuestionario extends JFrame implements Datos{
         selecColor.add(mColor);
         seccionI.add(selecColor); 
         
-        seccionD = new JPanel(new GridLayout(12, 1));
+        seccionD = new JPanel(new GridLayout(9, 1));
         seccionD.add(new JLabel(" "));
         seccionD.add(new JLabel("Ingrese su nombre de usuario", SwingConstants.CENTER));
         seccionD.add(nombre2 = new JTextField(10));
@@ -75,7 +75,19 @@ public class Cuestionario extends JFrame implements Datos{
 
         enviar = new JButton("Enviar");
         JPanel sup= new JPanel(new GridLayout(1,3));
-        JPanel inf= new JPanel(new GridLayout(3,3));
+        JPanel inf= new JPanel(new GridLayout(5,3));
+        inf.add(new JLabel("Modo de Juego  ", SwingConstants.RIGHT));
+        modo = new JComboBox(modos);
+        inf.add(modo);
+        JPanel ayudaPanel= new JPanel(new GridLayout(1,5));
+        JButton ayuda = new JButton("?");
+        for(int i=1; i<= 4; i++)
+        	if(i == 2)
+        		ayudaPanel.add(ayuda);
+        	else
+        		ayudaPanel.add(new JLabel(" "));
+        ayuda.addActionListener(new mostrarAyuda());
+        inf.add(ayudaPanel);
         for(int i= 1; i<= 4; i++)
         	inf.add(new JLabel(""));
         inf.add(enviar);
@@ -125,6 +137,13 @@ public class Cuestionario extends JFrame implements Datos{
                 JOptionPane.showMessageDialog(null, "Ingrese y/o seleccione datos correctos");           
         }
     }
+    
+    private class mostrarAyuda implements ActionListener {
+        public void actionPerformed(ActionEvent e) {            
+        	JOptionPane.showMessageDialog(null, ayudas[modo.getSelectedIndex()]);           
+        }
+    }
+    
     public JTextField generarColores(Color c) {
         JTextField color = new JTextField(3);
         color.setBackground(c);
