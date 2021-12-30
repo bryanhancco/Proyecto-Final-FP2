@@ -1,12 +1,8 @@
 
 import java.io.*;
-public class DatosJugadores {
-    private ObjectOutputStream fileOut;
-    private ObjectInputStream fileIn;
-    private Jugador jug1;
-    private Jugador jug2;
-    
-    public void actualizarDatos(Jugador j1, Jugador j2){
+public class DatosJugadores { 
+    public static void actualizarDatos(Jugador j1, Jugador j2){
+        ObjectOutputStream fileOut;
         try {
             fileOut = new ObjectOutputStream(new FileOutputStream("ultimaPartida.dat"));
             fileOut.writeObject(j1);
@@ -17,8 +13,9 @@ public class DatosJugadores {
             System.out.println("Error: " + e.getMessage());
         }
     }   
-    public Jugador[] obtenerDatosJugador () {
+    public static Jugador[] obtenerDatosJugador () {
         Jugador[] jugadores = new Jugador[2];
+        ObjectInputStream fileIn;
         try {
             fileIn = new ObjectInputStream(new FileInputStream("ultimaPartida.dat"));
             jugadores[0] = (Jugador) fileIn.readObject();
