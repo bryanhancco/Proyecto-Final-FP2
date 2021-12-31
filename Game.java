@@ -142,7 +142,6 @@ public class Game extends JFrame implements Datos{
         t.add(new JLabel("Terreno: " + datos[0], SwingConstants.CENTER));
 	t.add(getPanel("R1"));
 	t.add(getPanel("R2"));
-        t.add(new JLabel("Esta jugando:", SwingConstants.CENTER));
         t.add(new JLabel("Soldados Restantes:", SwingConstants.CENTER));
         t.add(getPanel("r1"));
         t.add(getPanel("r2"));
