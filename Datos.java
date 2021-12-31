@@ -19,5 +19,5 @@ interface Datos {
 	
     String[] ayudas =   {"Gana el que lleve cinco soldados a la \nfortaleza enemiga",
 			"Similar al clásico pero solo es necesario \nllevar un soldado",
-			"Los soldados ya no reaparecen y se \npuede perder por falta de unidades"};
+			"Ya no aparecen escudos y es necesario\nllevar un soldado"};
 }
