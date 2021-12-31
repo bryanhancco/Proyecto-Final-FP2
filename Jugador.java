@@ -1,8 +1,8 @@
-import java.util.*;
+
 import java.awt.*;
 import java.io.*;
 public class Jugador implements Serializable {
-    private ArrayList<String> ubicaciones;
+    private int cantSoldados;
     private Color colorEscogido;
     private String nombreJugador;
     private String nombreReino;
@@ -10,12 +10,14 @@ public class Jugador implements Serializable {
     private int turnosUtilizados;
     
     public Jugador(Color c, String nombreJ, String nombreR){
+        cantSoldados = 10;
         haGanado = false;
         colorEscogido = c;
         nombreJugador = nombreJ;
         nombreReino = nombreR;
         turnosUtilizados = 0;
     }
+   
     public String getNombre() {
         return nombreJugador;
     }
@@ -31,8 +33,8 @@ public class Jugador implements Serializable {
     public int cantTurnos() {
         return turnosUtilizados;
     }
-    public void eliminarJugador() {
-        ubicaciones.remove(0);
+    public void eliminarSoldado() {
+        cantSoldados--;
     }
     public void aumentarTurno() {
         turnosUtilizados++;
@@ -41,3 +43,4 @@ public class Jugador implements Serializable {
         haGanado = true;
     }
 }
+
