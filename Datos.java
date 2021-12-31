@@ -7,7 +7,7 @@ interface Datos {
     String[] modos= {"Clásico","Turbo","Realista"};
 	final Color[] COLORES= {Color.YELLOW, Color.RED, Color.GREEN, Color.BLUE
 			, Color.MAGENTA, Color.PINK, Color.ORANGE};
-	final String[] colores= {"Amarrillo", "Rojo", "Green", "Blue"
+	final String[] colores= {"Amarillo", "Rojo", "Verde", "Azul"
 			, "Magenta", "Rosa", "Naranja"};
 	String[] consejos= {"Observa indicador de númerode minas antes de mover",
 			"Consejo2",
