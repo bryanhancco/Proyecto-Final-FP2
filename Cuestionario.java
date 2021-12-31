@@ -10,7 +10,6 @@ public class Cuestionario extends JFrame implements Datos{
     private JButton enviar, mColor, mColor2;
     private JComboBox color1, color2, modo;
     private JTextField nombre1, nombre2, reino1, reino2;
-    private boolean enviarDatos = false;
     
     public Cuestionario() {
         setTitle("Seleccione su color preferido");
@@ -107,8 +106,7 @@ public class Cuestionario extends JFrame implements Datos{
             int ind2 = color2.getSelectedIndex();
             boolean condicion = (!(nombre1.getText().equals("")) && !(nombre2.getText().equals("")) && !(reino1.getText().equals("")) && !(reino2.getText().equals("")));
             if ((ind1 != ind2) && condicion) {
-                JOptionPane.showMessageDialog(null, "Datos Enviados");
-                enviarDatos = true;             
+                JOptionPane.showMessageDialog(null, "Datos Enviados");   
                 setVisible(false);
                 new Game(COLORES[ind1], COLORES[ind2], nombre1.getText(), nombre2.getText(), reino1.getText(), reino2.getText(), modo.getSelectedIndex());
             }
