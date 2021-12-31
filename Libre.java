@@ -20,4 +20,8 @@ public class Libre extends Cuadrante {
     public void disminuirCantidad() {
         numero--;
     }
+    
+    public boolean tieneEscudo() {
+    	return tieneEscudo;
+    }
 }
