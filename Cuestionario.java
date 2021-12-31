@@ -131,7 +131,7 @@ public class Cuestionario extends JFrame implements Datos{
                 JOptionPane.showMessageDialog(null, "Datos Enviados");
                 enviarDatos = true;             
                 setVisible(false);
-                new Game(COLORES[ind2], COLORES[ind1], nombre1.getText(), nombre2.getText(), reino1.getText(), reino2.getText());
+                new Game(COLORES[ind1], COLORES[ind2], nombre1.getText(), nombre2.getText(), reino1.getText(), reino2.getText(), modo.getSelectedIndex());
             }
             else 
                 JOptionPane.showMessageDialog(null, "Ingrese y/o seleccione datos correctos");           
@@ -154,4 +154,3 @@ public class Cuestionario extends JFrame implements Datos{
         new Cuestionario();
     }
 }
-
