@@ -9,15 +9,12 @@ public class Cuadrante {
         fila = f;
         columna = c;
     }
-    
     public void setFila(int fila) {
         this.fila = fila;
-    }
-    
+    }  
     public void setColumna(int columna) {
         this.columna = columna;
-    }
-    
+    }   
     public void cambiarEstado() {
         estaOculto = false;
     }
