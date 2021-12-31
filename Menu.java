@@ -5,14 +5,13 @@ import java.awt.event.*;
 public class Menu extends JFrame {
     private static final int ANCHO = 1200;
     private static final int ALTO = 600;
-    private JPanel botonesCentro, estadisticas, textoCreditos;
+    private JPanel botonesCentro, estadisticas, textGuia;
     private JButton iniciarJuego;
     private JButton creditos;
     private JButton puntajes;
     private JButton guia;
     private JButton regresar;
     private JLabel imagen;
-    private JTextArea textGuia;
     private boolean viendoPuntajes;
     private Jugador jug1, jug2;
     
@@ -33,21 +32,27 @@ public class Menu extends JFrame {
         puntajes = new JButton("Ver Resultados");
         guia = new JButton("Como jugar");
         regresar = new JButton("Regresar");
-        textGuia = new JTextArea(
-                //Linea 1
-                "Sea por la modalidad que sea, el objetivo del jugador "+
-                "es el de destruir la torre de su enemigo, de manera que "+
-                "tendrÃ¡ que seleccionar la posicion a la que desea moverse.\n"+
-                //Linea 2
-                "Si pisa una mina morira\n"+
-                "Si llega a la torre, su soldado morira, pero disminuira la "+
-                "vida de la torre\n"+
-                "Si es atacado posiblemente morira, como tambien puede sobrevivir." +
-                //Linea 3
-                "REGLAS BÃSICAS DEL BUSCAMINAS\n"+
-                "Los cuadrantes que presente el buscaminas representan "
-        );
-        textGuia.setEditable(false);
+        JTextArea instrucciones = new JTextArea( 
+        "---> Los cuadrados pintados de rojo indican los posibles movimientos.\n"
+        + "---> No se puede retroceder.\n"
+        + "---> El objetivo es destruir la torre anterior, la cual contará con tres o uno de vida, según el modo de juego.\n"
+        + "---> Cada vez que un soldado llega al otro extremo se le baja una vida a la torre de dicho equipo, seguido de esto el soldado quedará eliminado.\n"
+        + "---> El número del cuadrante representa la cantidad de minas que tiene alrededor de sí.\n"
+        + "---> Los escudos permiten que el usuario evite morir en caso de que haya pisado una mina, no es útil cuando se enfrenta a otro soldado.\n"
+        + "---> Hay un indicador de turnos en la parte superior del tablero.\n"
+        + "---> Puede consultar con panel ubicado al lado izquierdo del tablero que proporciona todo sobre el estado actual de la partida\n"
+        + "---> Preste atención al indicador de minas que está en la parte superior, eso le indica las minas que están próximas, para que en base a esto pueda tomar una mejor decisión\n"
+        + "---> Preste atención al indicador de escudo próximo, le facilitará encontrar uno\n"
+        + "---> Los escudos desaparecen después de dar con una mina.\n"
+        + "---> Solo se podrá mover el primer soldado del ejército, los demás se irán activando conforme queden eliminados los soldados móviles.\n"
+        + "---> Al encontrarse con un soldado del equipo contrario, se ejecutará una batalla en la que el ganador se seleccionará al azar.\n"
+        + "--->Si necesita alguna ayuda, en los créditos puede encontrar nuestros correos.\n");
+        instrucciones.setEditable(false);
+        textGuia= new JPanel(new BorderLayout());
+        textGuia.add(instrucciones, BorderLayout.CENTER);
+        textGuia.add(new JLabel(" "), BorderLayout.SOUTH);
+        textGuia.add(new JLabel(" ---"), BorderLayout.EAST);
+        textGuia.add(new JLabel(" ---"), BorderLayout.WEST);
         
         botonesCentro.add(iniciarJuego);      
         botonesCentro.add(puntajes);
@@ -74,7 +79,6 @@ public class Menu extends JFrame {
                 setVisible(false);
                 new Cuestionario();
             }
-
             else if (e.getSource() == puntajes) {
                 estadisticas = new JPanel(new GridLayout(0, 6));
                 viendoPuntajes = true;
@@ -107,7 +111,8 @@ public class Menu extends JFrame {
                 estadisticas.setVisible(true);                
                 regresar.setVisible(true);
             }
-            else {              
+            else {
+            	textGuia.add(new JLabel("__INSTRUCCIONES:"), BorderLayout.NORTH);
                 add(textGuia, BorderLayout.CENTER);
                 add(regresar, BorderLayout.SOUTH);
                 textGuia.setVisible(true);                
