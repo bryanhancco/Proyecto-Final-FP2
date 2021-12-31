@@ -1,9 +1,6 @@
 import java.awt.*;
 interface Datos {
-    Color c1 = null;
-    Color c2 = null;
-    String nombre1= "", nombre2= "";
-
+	
     String[] modos = {"Clásico","Turbo","Realista"};
     Color[] COLORES = {Color.YELLOW, Color.RED, Color.GREEN, Color.BLUE
 			, Color.MAGENTA, Color.PINK, Color.ORANGE};
