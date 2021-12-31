@@ -1,3 +1,4 @@
+import java.util.*;
 public class Cuadrante {
     private int fila;
     private int columna;
@@ -25,16 +26,14 @@ public class Cuadrante {
     }
     public int getFila() {
         return fila;
-    }
-    
+    } 
     public int getColumna() {
         return columna;
     }
-    
     public int getNumero() {
         return 0;
     }
-    
-    public void setNumero(int num) {
+    public boolean tieneEscudo() {
+        return false;
     }
 }
