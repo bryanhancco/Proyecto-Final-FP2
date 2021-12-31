@@ -54,7 +54,7 @@ public class Menu extends JFrame {
         guia.addActionListener(new OpcionesPrincipales());
         regresar.addActionListener(new Regresar());
         botonesCentro.setPreferredSize(new Dimension(ANCHO, 150));
-        imagen.setIcon(new ImageIcon("Media/runanddestroy.jpeg"));
+        imagen.setIcon(new ImageIcon("runanddestroy.jpeg"));
         add(imagen, BorderLayout.CENTER);
         add(botonesCentro, BorderLayout.SOUTH);      
     }
