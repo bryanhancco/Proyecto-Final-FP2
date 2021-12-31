@@ -2,7 +2,7 @@
 public class Libre extends Cuadrante {
     private int numero;
     private boolean tieneEscudo;
-    public static final int cantEscudos = 4;
+    public static final int CANTESCUDOS = 4;
     
     public Libre(int f, int c) {
         super(f, c);
