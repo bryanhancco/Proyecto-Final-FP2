@@ -22,6 +22,7 @@ public class Game extends JFrame implements Datos{
         miTablero = new Tablero();
         ejer1 = new Ejercito(1, 1);
         ejer2 = new Ejercito(12, 2);
+        
         if (modoIndice == 0) {
             miTablero.generarEscudos();
         }
@@ -78,9 +79,7 @@ public class Game extends JFrame implements Datos{
                     botonesAccion[i][j].setText(getLista().get(Tablero.toKey(i + 1,j + 1)).getName());
                 }
                 else {
-                    botonesAccion[i][j].setBackground(misColores[0]);   
-                    /*if (miTablero.getCuadrantes()[i][j].tieneEscudo())
-                        botonesAccion[i][j].setBackground(Color.YELLOW);  */                                        
+                    botonesAccion[i][j].setBackground(misColores[0]);                                       
                 }                                            
                 botonesAccion[i][j].addActionListener(new Acciones());
                 tablero.add(botonesAccion[i][j]);
@@ -122,7 +121,7 @@ public class Game extends JFrame implements Datos{
                             if (botonesAccion[f][c].getBackground().equals(Color.RED))
                         	movimiento(botonesAccion[f][c], f, c);
                             else
-                                JOptionPane.showMessageDialog(null, "Â¡Movimiento InvÃ¡lido!");                        
+                                JOptionPane.showMessageDialog(null, "¡Movimiento Inválido!");                        
                             actDatos();
                         }
                         else
@@ -130,6 +129,13 @@ public class Game extends JFrame implements Datos{
                     }
                 }
             }
+        }
+    }
+     //Listener que permite regresar al menÃº
+    private class Salir implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+            setVisible(false);
+            new Menu();
         }
     }
     //permite seleccionar al soldado del ejercito correspondiente
@@ -144,28 +150,26 @@ public class Game extends JFrame implements Datos{
 	    fAux = f;
 	    cAux = c;
 	    cambiarColor(f, c, Color.RED);
-        if (hayEscudoCerca) 
-            ocurrencia.setVisible(true);
-            
+            if (hayEscudoCerca) 
+                ocurrencia.setVisible(true);           
 	    hacerMovimiento = true; 
         }
         else
-            JOptionPane.showMessageDialog(null, "Â¡Seleccione a un soldado!");  
+            JOptionPane.showMessageDialog(null, "¡Seleccione a un soldado!");  
     }     
     //muestra los mensajes de la barra lateral izquierda
     public void addLabel(JPanel t) {
-        t.add(new JLabel("ESTADÃSTICAS", SwingConstants.CENTER));        
+        t.add(new JLabel("ESTADÍSTICAS", SwingConstants.CENTER));        
         t.add(new JLabel("Terreno: " + datos[0], SwingConstants.CENTER));
 	t.add(getPanel("R1"));
 	t.add(getPanel("R2"));
         t.add(getPanel("Mensaje"));
-        t.add(new JLabel("Esta jugando:", SwingConstants.CENTER));
         t.add(new JLabel("Soldados Restantes:", SwingConstants.CENTER));
         t.add(getPanel("r1"));
         t.add(getPanel("r2"));        
 	t.add(getPanel("Torre1"));      
         t.add(getPanel("Torre2"));
-        JButton bReinicio =  new JButton("Regresar");
+        JButton bReinicio =  new JButton("Salir");
         
 	labels.get("R1").setText(datos[1]);
         labels.get("R2").setText(datos[2]);
@@ -179,14 +183,7 @@ public class Game extends JFrame implements Datos{
         bReinicio.addActionListener(new Salir());
         t.add(bReinicio);
         actDatos();
-    }
-    //Listener que permite regresar al menÃº
-    private class Salir implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
-            setVisible(false);
-            new Menu();
-        }
-    }
+    }  
    //
     public JPanel getPanel(String et) {
         JPanel p = new JPanel(new BorderLayout());
@@ -210,21 +207,21 @@ public class Game extends JFrame implements Datos{
     //actualiza los datos mostrados en la barra lateral izquierda
     public void actDatos() {
         int team = (turno + 1) % 2 + 1;    
-		labels.get("Turno").setText(datos[team]);
-		if (team == 1) {
-	            turnoPanel.setVisible(true);
-	            turnoPanel2.setVisible(false);
-	            }
-		else {
-	            turnoPanel2.setVisible(true);
-	            turnoPanel.setVisible(false);
-		}
-		labels.get("Turno").setForeground(negativo(misColores[team]));
-	    labels.get("r1").setText(datos[1] + ": " + getLstTeam(1).size() + " soldados");
-		labels.get("r2").setText(datos[2] + ": " + getLstTeam(2).size() + " soldados");
-	    labels.get("Torre1").setText("Torre 1: " + ejer1.getTorre().getVidaTorre());
-		labels.get("Torre2").setText("Torre 2: " + ejer2.getTorre().getVidaTorre());
-		actMensaje();
+	labels.get("Turno").setText(datos[team]);
+	if (team == 1) {
+	    turnoPanel.setVisible(true);
+	    turnoPanel2.setVisible(false);
+	}
+	else {
+	    turnoPanel2.setVisible(true);
+	    turnoPanel.setVisible(false);
+	}
+	labels.get("Turno").setForeground(negativo(misColores[team]));
+	labels.get("r1").setText(datos[1] + ": " + getLstTeam(1).size() + " soldados");
+	labels.get("r2").setText(datos[2] + ": " + getLstTeam(2).size() + " soldados");
+	labels.get("Torre1").setText("Torre 1: " + ejer1.getTorre().getVidaTorre());
+	labels.get("Torre2").setText("Torre 2: " + ejer2.getTorre().getVidaTorre());
+	actMensaje();
     }   
 
     public void actMensaje() {
@@ -251,7 +248,7 @@ public class Game extends JFrame implements Datos{
                 accionMovimiento(f, c, team);
                 if (miTablero.getCuadrantes()[f][c].tieneEscudo()) {
                     getLista().get(Tablero.toKey(f +1 , c + 1)).setEscudo();
-                    JOptionPane.showMessageDialog(null, "Â¡Su soldado tiene un escudo!");
+                    JOptionPane.showMessageDialog(null, "¡Su soldado tiene un escudo!");
                     miTablero.getCuadrantes()[f][c]= new Libre(f , c);
                 } 
                 descubrirNumeros(f, c);    
@@ -269,14 +266,15 @@ public class Game extends JFrame implements Datos{
     }
     //se ejecuta tras iniciarse el movimiento
     public void atacarTorre(int f, int c, int team) {
-        JOptionPane.showMessageDialog(null, "Torre " + team + " Atacada");
+        JOptionPane.showMessageDialog(null, "Torre " + (team%2+1) + " Atacada");
         getEjercito(team).getSoldados().remove(Tablero.toKey(f + 1, c + 1));
         boton(Tablero.toKey(f + 1, c + 1)).setBackground(misColores[0]);
         boton(Tablero.toKey(f + 1, c + 1)).setText("");
-        getEjercito(team).getTorre().torreAtacada();
-        if (!getEjercito(team).getTorre().enPie()) {
-            jugadores[Math.abs(team-2)].haGanado();
+        getEjercito(team%2+1).getTorre().torreAtacada();
+        if (!getEjercito(team%2+1).getTorre().enPie()) {
+            jugadores[team-1].haGanado();
             DatosJugadores.actualizarDatos(jugadores[0], jugadores[1]);
+            JOptionPane.showMessageDialog(null, "¡Felicidades "+jugadores[team-1].getNombre()+", ha ganado el juego!");
             setVisible(false);
             new Menu();
         }
@@ -311,7 +309,7 @@ public class Game extends JFrame implements Datos{
     }
     //metodo elimina al jugador y "esclarece" las posiciones circundantes
     public void explotarMina(int f, int c, int team) {
-        JOptionPane.showMessageDialog(null, "Â¡Pisaste una mina!");
+        JOptionPane.showMessageDialog(null, "¡Pisaste una mina!");
         miTablero.getCuadrantes()[f][c] = new Libre(f, c);
         if (getLista().get(Tablero.toKey(f + 1, c + 1)).tieneEscudo()) {
             JOptionPane.showMessageDialog(null, "Ha perdido su escudo"); 
@@ -354,8 +352,6 @@ public class Game extends JFrame implements Datos{
                 if (i < 0 || i > 9) continue;
                 for (int j = c - 1; j <= c + 1; j++){
                     if (j <= 0 || j >= 11) continue;   
-                   /* if (miTablero.getCuadrantes()[i][j].tieneEscudo())
-                        hayEscudoCerca = true;*/
                     if(getLista().containsKey(Tablero.toKey(i + 1, j + 1))) continue;
                     if (miTablero.getCuadrantes()[i][j] instanceof Mina || !miTablero.getCuadrantes()[i][j].getEstado()) continue;   
                     if (miTablero.getCuadrantes()[i][j].getNumero() > 0 ) {
@@ -382,6 +378,7 @@ public class Game extends JFrame implements Datos{
         int team1 = getLista().get(ub1).getTeam();
         int team2 = getLista().get(ub2).getTeam();
         if (num == 0) {
+            JOptionPane.showMessageDialog(null, "¡Su jugador ha ganado la batalla!");
             jugadores[1].eliminarSoldado();
             getEjercito(team2).retirarSoldado(ub2);
             getEjercito(team1).moverSoldado(ub1, ub2);
@@ -389,6 +386,7 @@ public class Game extends JFrame implements Datos{
             boton(ub2).setBackground(boton(ub1).getBackground());
         }
         else {
+            JOptionPane.showMessageDialog(null, "¡Oh no!, tu soldado ha muerto");
             jugadores[0].eliminarSoldado();
             getEjercito(team1).retirarSoldado(ub1); 
         }
@@ -402,8 +400,7 @@ public class Game extends JFrame implements Datos{
             return ejer1.getLstOrdenada();
         else
             return ejer2.getLstOrdenada();
-    }
-    
+    }    
     //devuelve la lista completa de soldados de ambos ejercitos
     public HashMap<String, Soldado> getLista(){
         HashMap<String, Soldado> lst = new HashMap<String, Soldado>();
