@@ -89,7 +89,7 @@ public class Tablero {
     public void generarEscudos() {
         int[][] pos = new int[10][12];
         int fila, columna;
-        for (int i=0; i<Libre.cantEscudos; i++){
+        for (int i=0; i<Libre.CANTESCUDOS; i++){
             do {
                 fila = (int)(Math.random()*10);
                 columna = (int)(Math.random()*10)+1;
