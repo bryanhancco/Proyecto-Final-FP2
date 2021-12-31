@@ -1,7 +1,6 @@
-
-
 import java.awt.*;
 import java.io.*;
+
 public class Jugador implements Serializable {
     private int cantSoldados;
     private Color colorEscogido;
@@ -17,8 +16,7 @@ public class Jugador implements Serializable {
         nombreJugador = nombreJ;
         nombreReino = nombreR;
         turnosUtilizados = 0;
-    }
-   
+    }     
     public String getNombre() {
         return nombreJugador;
     }
@@ -47,5 +45,14 @@ public class Jugador implements Serializable {
     }
     public void haGanado() {
         haGanado = true;
+    }
+    public double puntajeFinal() {
+        double puntajeFinal = 0.0;
+        if (haGanado) 
+            puntajeFinal += 500.0;
+        puntajeFinal += cantSoldados*25.0;
+        puntajeFinal = (puntajeFinal*(100.0-turnosUtilizados*(0.1)))/100.0;
+        
+        return puntajeFinal;
     }
 }
