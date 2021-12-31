@@ -80,6 +80,7 @@ public class Menu extends JFrame {
                 new Cuestionario();
             }
             else if (e.getSource() == puntajes) {
+            	setSize(700, 300);
                 estadisticas = new JPanel(new GridLayout(0, 6));
                 viendoPuntajes = true;
                 jug1 = DatosJugadores.obtenerDatosJugador()[0];
@@ -135,6 +136,7 @@ public class Menu extends JFrame {
     }
     private class Regresar implements ActionListener {
         public void actionPerformed(ActionEvent e) {
+        	setSize(ANCHO, ALTO);
             if (viendoPuntajes)
                 estadisticas.setVisible(false);            
             else 
