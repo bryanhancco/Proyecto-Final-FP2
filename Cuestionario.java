@@ -7,11 +7,10 @@ public class Cuestionario extends JFrame implements Datos{
     private static final int ANCHO = 600;
     private static final int ALTO = 400;
     private JPanel seccionI, seccionD; 
-    private JButton enviar;
+    private JButton enviar, mColor, mColor2;
     private JComboBox reinoOpc, color1, color2, modo;
     private JTextField nombre1, nombre2, reino1, reino2;
     private boolean enviarDatos = false;
-    JButton mColor, mColor2;
     
     public Cuestionario() {
         setTitle("Seleccione su color preferido");
@@ -21,22 +20,6 @@ public class Cuestionario extends JFrame implements Datos{
         createContents();    
         setVisible(true);
     }
-    
-    public String[] cDisponibles(){
-        String[] array= new String[COLORES.length - 2];
-        if(color1 == null && color2== null)
-            return colores;
-        int i= 0;
-        JOptionPane.showMessageDialog(null, "Usando cdisponibles");
-        for(String c: colores) {
-            if(!color1.getSelectedItem().equals(c) && !color2.getSelectedItem().equals(c)) {
-                array[i]= colores[i];
-                i++;
-            }
-        }
-        return array;
-    }
-    
     public void createContents() {
 
         seccionI = new JPanel(new GridLayout(9, 1));
@@ -81,19 +64,20 @@ public class Cuestionario extends JFrame implements Datos{
         inf.add(modo);
         JPanel ayudaPanel= new JPanel(new GridLayout(1,5));
         JButton ayuda = new JButton("?");
-        for(int i=1; i<= 4; i++)
-        	if(i == 2)
-        		ayudaPanel.add(ayuda);
-        	else
-        		ayudaPanel.add(new JLabel(" "));
+        for(int i=1; i<= 4; i++) {
+            if(i == 2)
+        	ayudaPanel.add(ayuda);
+            else
+        	ayudaPanel.add(new JLabel(" "));
+        }
         ayuda.addActionListener(new mostrarAyuda());
         inf.add(ayudaPanel);
         for(int i= 1; i<= 4; i++)
         	inf.add(new JLabel(""));
         inf.add(enviar);
         for(int i= 1; i<= 4; i++)
-        	inf.add(new JLabel(""));
-        JLabel espacio= new JLabel(" ");
+            inf.add(new JLabel(""));
+        JLabel espacio = new JLabel(" ");
         espacio.setPreferredSize(new Dimension(15,20));
         sup.add(seccionI);
         sup.add(espacio);
@@ -116,12 +100,6 @@ public class Cuestionario extends JFrame implements Datos{
                 mColor2.setBackground(COLORES[color2.getSelectedIndex()]);
         }
     }
-    public String getReino() {
-        return reinoOpc.getSelectedItem().toString();
-    }
-    public boolean getEstado() {
-        return enviarDatos;
-    }
     private class Enviar implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             int ind1 = color1.getSelectedIndex();
@@ -136,20 +114,12 @@ public class Cuestionario extends JFrame implements Datos{
             else 
                 JOptionPane.showMessageDialog(null, "Ingrese y/o seleccione datos correctos");           
         }
-    }
-    
+    }   
     private class mostrarAyuda implements ActionListener {
         public void actionPerformed(ActionEvent e) {            
         	JOptionPane.showMessageDialog(null, ayudas[modo.getSelectedIndex()]);           
         }
-    }
-    
-    public JTextField generarColores(Color c) {
-        JTextField color = new JTextField(3);
-        color.setBackground(c);
-        color.setEditable(false);
-        return color;
-    }
+    }   
     public static void main(String args[]) {
         new Cuestionario();
     }
