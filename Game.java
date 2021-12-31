@@ -142,6 +142,9 @@ public class Game extends JFrame implements Datos{
         t.add(new JLabel("Terreno: " + datos[0], SwingConstants.CENTER));
 	t.add(getPanel("R1"));
 	t.add(getPanel("R2"));
+	t.add(getPanel("Mensaje"));
+	
+	JOptionPane.showMessageDialog(null,consejos[0]);
         t.add(new JLabel("Soldados Restantes:", SwingConstants.CENTER));
         t.add(getPanel("r1"));
         t.add(getPanel("r2"));
@@ -152,7 +155,6 @@ public class Game extends JFrame implements Datos{
         
 	labels.get("R1").setText(datos[1]);
         labels.get("R2").setText(datos[2]);
-	
         labels.get("R1").setBackground(misColores[1]);
         labels.get("R1").setForeground(negativo(misColores[1]));
         labels.get("R1").setPreferredSize(new Dimension(20,20));
@@ -193,21 +195,26 @@ public class Game extends JFrame implements Datos{
     //actualiza los datos mostrados en la barra lateral izquierda
     public void actDatos() {
         int team = (turno + 1) % 2 + 1;    
-	labels.get("Turno").setText(datos[team]);
-	if (team == 1) {
-            turnoPanel.setVisible(true);
-            turnoPanel2.setVisible(false);
-            }
-	else {
-            turnoPanel2.setVisible(true);
-            turnoPanel.setVisible(false);
-	}
-	labels.get("Turno").setForeground(negativo(misColores[team]));
-        labels.get("r1").setText(datos[1] + ": " + getLstTeam(1).size() + " soldados");
-	labels.get("r2").setText(datos[2] + ": " + getLstTeam(2).size() + " soldados");
-        labels.get("Torre1").setText("Torre 1: " + ejer1.getTorre().getVidaTorre());
-	labels.get("Torre2").setText("Torre 2: " + ejer2.getTorre().getVidaTorre());
+		labels.get("Turno").setText(datos[team]);
+		if (team == 1) {
+	            turnoPanel.setVisible(true);
+	            turnoPanel2.setVisible(false);
+	            }
+		else {
+	            turnoPanel2.setVisible(true);
+	            turnoPanel.setVisible(false);
+		}
+		labels.get("Turno").setForeground(negativo(misColores[team]));
+	    labels.get("r1").setText(datos[1] + ": " + getLstTeam(1).size() + " soldados");
+		labels.get("r2").setText(datos[2] + ": " + getLstTeam(2).size() + " soldados");
+	    labels.get("Torre1").setText("Torre 1: " + ejer1.getTorre().getVidaTorre());
+		labels.get("Torre2").setText("Torre 2: " + ejer2.getTorre().getVidaTorre());
+		actMensaje();
     }   
+    
+    public void actMensaje() {
+    	labels.get("Mensaje").setText(consejos[(int)(Math.random()*consejos.length)]);
+    }
     //obtiene el boton correspondiente segun la ubicación
     public JButton boton(String ub) {
         int large = ub.length();
