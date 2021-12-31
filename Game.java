@@ -9,8 +9,8 @@ public class Game extends JFrame implements Datos{
     private String [] datos = new String[3];
     private HashMap<String, JLabel> labels;
     private Color[] misColores = new Color[3];
-    private static final int ANCHO = 1400;
-    private static final int ALTO = 800;
+    private static final int ANCHO = 1200;
+    private static final int ALTO = 600;
     private JButton[][] botonesAccion;
     private String texto = "";
     private JPanel turnoPanel,turnoPanel2, tablero, estadisticas, top, ocurrencia;
@@ -40,7 +40,7 @@ public class Game extends JFrame implements Datos{
         jugadores = new Jugador[2];
         jugadores[0] = new Jugador(c1, n1, r1);
         jugadores[1] = new Jugador(c2, n2, r2);
-        DatosJugadores.actualizarDatos(jugadores[0], jugadores[1]);
+        Jugador.actualizarDatos(jugadores[0], jugadores[1]);
         datos[0] = "Plano";
         datos[1] = n1;
         datos[2] = n2;              
@@ -60,9 +60,9 @@ public class Game extends JFrame implements Datos{
     public void createContents() {     
         //creando y editando los paneles
         tablero = new JPanel(new GridLayout(10, 12));		
-        tablero.setPreferredSize(new Dimension(1050, 800));
+        tablero.setPreferredSize(new Dimension(900, 600));
         estadisticas = new JPanel(new GridLayout(0, 1));
-        estadisticas.setPreferredSize(new Dimension(350, 800));   
+        estadisticas.setPreferredSize(new Dimension(300, 600));   
         top = new JPanel(new GridLayout(1, 0));
         top.setPreferredSize(new Dimension(1050, 50));
         
@@ -78,9 +78,8 @@ public class Game extends JFrame implements Datos{
                     botonesAccion[i][j].setForeground(Color.WHITE);
                     botonesAccion[i][j].setText(getLista().get(Tablero.toKey(i + 1,j + 1)).getName());
                 }
-                else {
-                    botonesAccion[i][j].setBackground(misColores[0]);                                       
-                }                                            
+                else 
+                    botonesAccion[i][j].setBackground(misColores[0]);                                                                                                
                 botonesAccion[i][j].addActionListener(new Acciones());
                 tablero.add(botonesAccion[i][j]);
             }
@@ -88,7 +87,7 @@ public class Game extends JFrame implements Datos{
         botonesAccion[0][0].setForeground(negativo(misColores[1]));
         botonesAccion[0][11].setForeground(negativo(misColores[2]));
         
-        //aÃ±adiendo los elementos a top
+        //añadiendo los elementos a top
         top.add(new JLabel(""));
         ocurrencia= getPanel("Escudo");       
         labels.get("Escudo").setForeground(Color.RED);
@@ -131,7 +130,7 @@ public class Game extends JFrame implements Datos{
             }
         }
     }
-     //Listener que permite regresar al menÃº
+    //Listener que permite regresar al menÃº
     private class Salir implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             setVisible(false);
@@ -142,7 +141,7 @@ public class Game extends JFrame implements Datos{
     public void seleccionarSoldado(int f, int c) {        
         int team = (turno + 1) % 2 + 1;
         jugadores[team - 1].aumentarTurno();
-        DatosJugadores.actualizarDatos(jugadores[0], jugadores[1]);
+        Jugador.actualizarDatos(jugadores[0], jugadores[1]);
         Soldado selec = getLista().get(Tablero.toKey(f + 1, c + 1));
         if(selec != null && getLstTeam(team).get(0) == selec) {	   
             labels.get("Minas").setText("Minas alrededor: " + miTablero.getCuadrantes()[f][c].getNumero());  
@@ -184,7 +183,7 @@ public class Game extends JFrame implements Datos{
         t.add(bReinicio);
         actDatos();
     }  
-   //
+
     public JPanel getPanel(String et) {
         JPanel p = new JPanel(new BorderLayout());
 	JLabel l = new JLabel("", SwingConstants.CENTER);
@@ -273,7 +272,7 @@ public class Game extends JFrame implements Datos{
         getEjercito(team%2+1).getTorre().torreAtacada();
         if (!getEjercito(team%2+1).getTorre().enPie()) {
             jugadores[team-1].haGanado();
-            DatosJugadores.actualizarDatos(jugadores[0], jugadores[1]);
+            Jugador.actualizarDatos(jugadores[0], jugadores[1]);
             JOptionPane.showMessageDialog(null, "¡Felicidades "+jugadores[team-1].getNombre()+", ha ganado el juego!");
             setVisible(false);
             new Menu();
