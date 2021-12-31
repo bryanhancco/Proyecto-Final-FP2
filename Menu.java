@@ -90,13 +90,13 @@ public class Menu extends JFrame {
                 //Datos del jugador 1
                 estadisticas.add(new JLabel(jug1.getNombre()));
                 estadisticas.add(new JLabel(jug1.getReino()));
-                estadisticas.add(new JLabel(""+jug1.getEstado()));
+                estadisticas.add(new JLabel(jug1.getEstado()));
                 estadisticas.add(new JLabel(""+jug1.cantTurnos()));
                 estadisticas.add(new JLabel(""));
                 //Datos del jugador 2
                 estadisticas.add(new JLabel(jug2.getNombre()));
                 estadisticas.add(new JLabel(jug2.getReino()));
-                estadisticas.add(new JLabel(""+jug2.getEstado()));
+                estadisticas.add(new JLabel(jug2.getEstado()));
                 estadisticas.add(new JLabel(""+jug2.cantTurnos()));
                 estadisticas.add(new JLabel(""));
                 
