@@ -28,6 +28,9 @@ public class Menu extends JFrame {
     public void createContents() {
         imagen = new JLabel("", SwingConstants.CENTER);
         botonesCentro = new JPanel(new GridLayout(2, 2));
+        estadisticas = new JPanel(new GridLayout(0, 6));
+        textoCreditos = new JPanel(new GridLayout(0, 6));
+        
         iniciarJuego = new JButton("Nuevo Juego");
         creditos = new JButton("Créditos");
         puntajes = new JButton("Ver Resultados");
@@ -52,7 +55,7 @@ public class Menu extends JFrame {
         creditos.addActionListener(new OpcionesPrincipales());
         puntajes.addActionListener(new OpcionesPrincipales());
         guia.addActionListener(new OpcionesPrincipales());
-        regresar.addActionListener(new Regresar());
+        
         botonesCentro.setPreferredSize(new Dimension(ANCHO, 150));
         imagen.setIcon(new ImageIcon("runanddestroy.jpeg"));
         add(imagen, BorderLayout.CENTER);
@@ -69,36 +72,39 @@ public class Menu extends JFrame {
                 new Cuestionario();
             }
             else if (e.getSource() == creditos) {
-                add(creditos, BorderLayout.CENTER);
+                add(textoCreditos, BorderLayout.CENTER);
                 add(regresar, BorderLayout.SOUTH);
-                creditos.setVisible(true);                
-                regresar.setVisible(true);
+                creditos.setVisible(true);
+                regresar.addActionListener(new Regresar());
+                regresar.setVisible(true);                
             }
             else if (e.getSource() == puntajes) {
+            	
                 viendoPuntajes = true;
                 jug1 = DatosJugadores.obtenerDatosJugador()[0];
                 jug2 = DatosJugadores.obtenerDatosJugador()[1];
-                estadisticas = new JPanel(new GridLayout(0, 6));
-                estadisticas.add(new JLabel("Nombre del jugador"));              
-                estadisticas.add(new JLabel("Nombre del reino"));               
-                estadisticas.add(new JLabel("Ha Ganado"));                
-                estadisticas.add(new JLabel("Turnos realizados"));              
-                estadisticas.add(new JLabel("Soldados restantes"));
-                estadisticas.add(new JLabel("Puntaje Final"));
+                estadisticas.add(new JLabel("Nombre del jugador", SwingConstants.CENTER));              
+                estadisticas.add(new JLabel("Nombre del reino", SwingConstants.CENTER));               
+                estadisticas.add(new JLabel("Ha Ganado", SwingConstants.CENTER));                
+                estadisticas.add(new JLabel("Turnos realizados", SwingConstants.CENTER));              
+                estadisticas.add(new JLabel("Soldados restantes", SwingConstants.CENTER));
+                estadisticas.add(new JLabel("Puntaje Final", SwingConstants.CENTER));
                 //Datos del jugador 1
-                estadisticas.add(new JLabel(jug1.getNombre()));
-                estadisticas.add(new JLabel(jug1.getReino()));
-                estadisticas.add(new JLabel(jug1.getEstado()));
-                estadisticas.add(new JLabel(""+jug1.cantTurnos()));
-                estadisticas.add(new JLabel(""+jug1.getCantSoldados()));
-                estadisticas.add(new JLabel(""+jug1.puntajeFinal()));
+                estadisticas.add(new JLabel(jug1.getNombre(), SwingConstants.CENTER));
+                estadisticas.add(new JLabel(jug1.getReino(), SwingConstants.CENTER));
+                estadisticas.add(new JLabel(jug1.getEstado(), SwingConstants.CENTER));
+                estadisticas.add(new JLabel(""+jug1.cantTurnos(), SwingConstants.CENTER));
+                estadisticas.add(new JLabel(""+jug1.getCantSoldados(), SwingConstants.CENTER));
+                estadisticas.add(new JLabel(""+jug1.puntajeFinal(), SwingConstants.CENTER));
                 //Datos del jugador 2
-                estadisticas.add(new JLabel(jug2.getNombre()));
-                estadisticas.add(new JLabel(jug2.getReino()));
-                estadisticas.add(new JLabel(jug2.getEstado()));
-                estadisticas.add(new JLabel(""+jug2.cantTurnos()));
-                estadisticas.add(new JLabel(""+jug2.getCantSoldados()));
-                estadisticas.add(new JLabel(""+jug2.puntajeFinal()));
+                estadisticas.add(new JLabel(jug2.getNombre(), SwingConstants.CENTER));
+                estadisticas.add(new JLabel(jug2.getReino(), SwingConstants.CENTER));
+                estadisticas.add(new JLabel(jug2.getEstado(), SwingConstants.CENTER));
+                estadisticas.add(new JLabel(""+jug2.cantTurnos(), SwingConstants.CENTER));
+                estadisticas.add(new JLabel(""+jug2.getCantSoldados(), SwingConstants.CENTER));
+                estadisticas.add(new JLabel(""+jug2.puntajeFinal(), SwingConstants.CENTER));
+                
+                
                 
                 add(estadisticas, BorderLayout.CENTER);
                 add(regresar, BorderLayout.SOUTH);
@@ -116,7 +122,6 @@ public class Menu extends JFrame {
     
     private class Regresar implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            creditos.setVisible(false);
             estadisticas.setVisible(false);           
             textGuia.setVisible(false);              
             regresar.setVisible(false);
