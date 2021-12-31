@@ -1,19 +1,17 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.*;
-import java.io.*;
 
 public class Menu extends JFrame {
     private static final int ANCHO = 1300;
     private static final int ALTO = 700;
     private JPanel botonesCentro, estadisticas;
     private JButton iniciarJuego;
-    private DatosJugadores d;
     private JButton continuarJuego;
     private JButton puntajes;
     private JButton guia;
     private JButton regresar;
+    private JLabel imagen;
     private JTextArea textGuia;
     private boolean viendoPuntajes;
     private Jugador jug1, jug2;
@@ -28,7 +26,7 @@ public class Menu extends JFrame {
     } 
     
     public void createContents() {
-        d = new DatosJugadores();
+        imagen = new JLabel("", SwingConstants.CENTER);
         botonesCentro = new JPanel(new GridLayout(2, 2));
         iniciarJuego = new JButton("Nuevo Juego");
         continuarJuego = new JButton("Continuar Juego");
@@ -36,12 +34,12 @@ public class Menu extends JFrame {
         guia = new JButton("Como jugar");
         regresar = new JButton("Regresar");
         textGuia = new JTextArea(
-                "Sea por la modalidad que sea, el objetivo del jugador\n"+
-                "es el de destruir la torre de su enemigo, de manera que\n"+
-                "tendrÃ¡ que seleccionar la posicion a la que desea moverse.\n\n"+
-                "Si pisa una mina morira.\n\n"+
-                "Si llega a la torre, su soldado morira, pero disminuira la\n"+
-                "vida de la torre.\n\n"+
+                "Sea por la modalidad que sea, el objetivo del jugador"+
+                "es el de destruir la torre de su enemigo, de manera que"+
+                "tendrÃ¡ que seleccionar la posicion a la que desea moverse."+
+                "Si pisa una mina morira\n"+
+                "Si llega a la torre, su soldado morira, pero disminuira la"+
+                "vida de la torre\n"+
                 "Si es atacado posiblemente morira, como tambien puede sobrevivir."        
         );
         
@@ -56,17 +54,14 @@ public class Menu extends JFrame {
         guia.addActionListener(new OpcionesPrincipales());
         regresar.addActionListener(new Regresar());
         botonesCentro.setPreferredSize(new Dimension(ANCHO, 150));
-       // JPanel centro= new JPanel(new BorderLayout());
-        //centro.setIconImagen(imagen);
-        JLabel imagen= new JLabel();
-        imagen.setIcon(new ImageIcon("Media/descarga.jpg"));
+        imagen.setIcon(new ImageIcon("Media/runanddestroy.jpeg"));
         add(imagen, BorderLayout.CENTER);
-        add(botonesCentro, BorderLayout.SOUTH);
-      
+        add(botonesCentro, BorderLayout.SOUTH);      
     }
     
     private class OpcionesPrincipales implements ActionListener {
         public void actionPerformed(ActionEvent e) {
+            imagen.setVisible(false);
             botonesCentro.setVisible(false);
             viendoPuntajes = false;
             if (e.getSource() == iniciarJuego) {
@@ -86,19 +81,19 @@ public class Menu extends JFrame {
                 estadisticas.add(new JLabel("Nombre del reino"));               
                 estadisticas.add(new JLabel("Ha Ganado"));                
                 estadisticas.add(new JLabel("Turnos realizados"));              
-                estadisticas.add(new JLabel("Soldados muertos"));
+                estadisticas.add(new JLabel("Soldados restantes"));
                 //Datos del jugador 1
                 estadisticas.add(new JLabel(jug1.getNombre()));
                 estadisticas.add(new JLabel(jug1.getReino()));
                 estadisticas.add(new JLabel(jug1.getEstado()));
                 estadisticas.add(new JLabel(""+jug1.cantTurnos()));
-                estadisticas.add(new JLabel(""));
+                estadisticas.add(new JLabel(""+jug1.getCantSoldados()));
                 //Datos del jugador 2
                 estadisticas.add(new JLabel(jug2.getNombre()));
                 estadisticas.add(new JLabel(jug2.getReino()));
                 estadisticas.add(new JLabel(jug2.getEstado()));
                 estadisticas.add(new JLabel(""+jug2.cantTurnos()));
-                estadisticas.add(new JLabel(""));
+                estadisticas.add(new JLabel(""+jug2.getCantSoldados()));
                 
                 add(estadisticas, BorderLayout.CENTER);
                 add(regresar, BorderLayout.SOUTH);
@@ -121,6 +116,7 @@ public class Menu extends JFrame {
             else 
                 textGuia.setVisible(false);              
             regresar.setVisible(false);
+            imagen.setVisible(true);
             botonesCentro.setVisible(true);
         }
     }
