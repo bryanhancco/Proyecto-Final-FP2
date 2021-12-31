@@ -6,7 +6,6 @@ public class Tablero {
         miTablero = new Cuadrante[10][12];
         generarMinas();
         generarLibres();
-        generarEscudos();
     }
     public Cuadrante[][] getCuadrantes(){
         return miTablero;
