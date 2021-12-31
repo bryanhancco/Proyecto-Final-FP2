@@ -1,11 +1,15 @@
 
+
 public class Torre {
     private int vidaTorre;
     private boolean torreEnPie;
     
     public Torre() {
-        vidaTorre = 1;
+        vidaTorre = 3;
         torreEnPie = true;
+    }
+    public void setRealista() {
+        vidaTorre = 1;
     }
     public void torreAtacada() {
         vidaTorre--;
