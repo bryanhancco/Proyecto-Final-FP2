@@ -9,13 +9,13 @@ interface Datos {
 			, Color.MAGENTA, Color.PINK, Color.ORANGE};
 	final String[] colores= {"Amarillo", "Rojo", "Verde", "Azul"
 			, "Magenta", "Rosa", "Naranja"};
-	String[] consejos= {"Observa indicador de númerode minas antes de mover",
-			"Consejo2",
-			"Consejo3",
-			"Consejo4",
-			"Consejo5",
-			"Consejo6",
-			"Consejo7"};
+	String[] consejos= {"Observa el indicador de número de minas antes de mover",
+			"Este atento, puede haber escudos cerca de usted",
+			"Procure llegar a la torre del enemigo",
+			"Si consigue un escudo, la proxima mina no le afectara",
+			"Dependiendo del modo, necesitara más soldados para ganar",
+			"Los números le indican cuantas minas tiene alrededor\n ese cuadrante",
+			"Sea cauteloso, evite las luchas con otros soldados"};
 	
 	String[] ayudas= 
 		{"Gana el que lleve cinco soldados a la \nfortaleza enemiga",
