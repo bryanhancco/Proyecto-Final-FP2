@@ -1,4 +1,5 @@
 
+
 import java.awt.*;
 import java.io.*;
 public class Jugador implements Serializable {
@@ -24,11 +25,16 @@ public class Jugador implements Serializable {
     public String getReino() {
         return nombreReino;
     }
+    public int getCantSoldados() {
+        return cantSoldados;
+    }
     public Color getColor() {
         return colorEscogido;
     }
-    public boolean getEstado() {
-        return haGanado;
+    public String getEstado() {
+        if (haGanado)
+            return "Sí";
+        return "No";
     }
     public int cantTurnos() {
         return turnosUtilizados;
@@ -43,4 +49,3 @@ public class Jugador implements Serializable {
         haGanado = true;
     }
 }
-
