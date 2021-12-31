@@ -5,9 +5,9 @@ import java.awt.event.*;
 public class Menu extends JFrame {
     private static final int ANCHO = 1300;
     private static final int ALTO = 700;
-    private JPanel botonesCentro, estadisticas;
+    private JPanel botonesCentro, estadisticas, textoCreditos;
     private JButton iniciarJuego;
-    private JButton continuarJuego;
+    private JButton creditos;
     private JButton puntajes;
     private JButton guia;
     private JButton regresar;
@@ -29,8 +29,8 @@ public class Menu extends JFrame {
         imagen = new JLabel("", SwingConstants.CENTER);
         botonesCentro = new JPanel(new GridLayout(2, 2));
         iniciarJuego = new JButton("Nuevo Juego");
-        continuarJuego = new JButton("Continuar Juego");
-        puntajes = new JButton("Ver Puntajes");
+        creditos = new JButton("Créditos");
+        puntajes = new JButton("Ver Resultados");
         guia = new JButton("Como jugar");
         regresar = new JButton("Regresar");
         textGuia = new JTextArea(
@@ -43,13 +43,13 @@ public class Menu extends JFrame {
                 "Si es atacado posiblemente morira, como tambien puede sobrevivir."        
         );
         
-        botonesCentro.add(iniciarJuego);
-        botonesCentro.add(continuarJuego);
+        botonesCentro.add(iniciarJuego);      
         botonesCentro.add(puntajes);
         botonesCentro.add(guia);
+        botonesCentro.add(creditos);
         
         iniciarJuego.addActionListener(new OpcionesPrincipales());
-        continuarJuego.addActionListener(new OpcionesPrincipales());
+        creditos.addActionListener(new OpcionesPrincipales());
         puntajes.addActionListener(new OpcionesPrincipales());
         guia.addActionListener(new OpcionesPrincipales());
         regresar.addActionListener(new Regresar());
@@ -63,37 +63,42 @@ public class Menu extends JFrame {
         public void actionPerformed(ActionEvent e) {
             imagen.setVisible(false);
             botonesCentro.setVisible(false);
-            viendoPuntajes = false;
+            viendoPuntajes = false;          
             if (e.getSource() == iniciarJuego) {
                 setVisible(false);
                 new Cuestionario();
             }
-            else if (e.getSource() == continuarJuego) {
-                //jug1 = d.obtenerDatosJugador()[0];
-                //jug2 = d.obtenerDatosJugador()[1];
+            else if (e.getSource() == creditos) {
+                add(creditos, BorderLayout.CENTER);
+                add(regresar, BorderLayout.SOUTH);
+                creditos.setVisible(true);                
+                regresar.setVisible(true);
             }
             else if (e.getSource() == puntajes) {
                 viendoPuntajes = true;
                 jug1 = DatosJugadores.obtenerDatosJugador()[0];
                 jug2 = DatosJugadores.obtenerDatosJugador()[1];
-                estadisticas = new JPanel(new GridLayout(0, 5));
+                estadisticas = new JPanel(new GridLayout(0, 6));
                 estadisticas.add(new JLabel("Nombre del jugador"));              
                 estadisticas.add(new JLabel("Nombre del reino"));               
                 estadisticas.add(new JLabel("Ha Ganado"));                
                 estadisticas.add(new JLabel("Turnos realizados"));              
                 estadisticas.add(new JLabel("Soldados restantes"));
+                estadisticas.add(new JLabel("Puntaje Final"));
                 //Datos del jugador 1
                 estadisticas.add(new JLabel(jug1.getNombre()));
                 estadisticas.add(new JLabel(jug1.getReino()));
                 estadisticas.add(new JLabel(jug1.getEstado()));
                 estadisticas.add(new JLabel(""+jug1.cantTurnos()));
                 estadisticas.add(new JLabel(""+jug1.getCantSoldados()));
+                estadisticas.add(new JLabel(""+jug1.puntajeFinal()));
                 //Datos del jugador 2
                 estadisticas.add(new JLabel(jug2.getNombre()));
                 estadisticas.add(new JLabel(jug2.getReino()));
                 estadisticas.add(new JLabel(jug2.getEstado()));
                 estadisticas.add(new JLabel(""+jug2.cantTurnos()));
                 estadisticas.add(new JLabel(""+jug2.getCantSoldados()));
+                estadisticas.add(new JLabel(""+jug2.puntajeFinal()));
                 
                 add(estadisticas, BorderLayout.CENTER);
                 add(regresar, BorderLayout.SOUTH);
@@ -111,10 +116,9 @@ public class Menu extends JFrame {
     
     private class Regresar implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            if (viendoPuntajes) 
-                estadisticas.setVisible(false);           
-            else 
-                textGuia.setVisible(false);              
+            creditos.setVisible(false);
+            estadisticas.setVisible(false);           
+            textGuia.setVisible(false);              
             regresar.setVisible(false);
             imagen.setVisible(true);
             botonesCentro.setVisible(true);
@@ -125,4 +129,3 @@ public class Menu extends JFrame {
         new Menu();
     }
 }
-
